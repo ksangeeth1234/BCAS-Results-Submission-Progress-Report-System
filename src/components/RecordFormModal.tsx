@@ -398,29 +398,29 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Relevant Submission Month (Calendar Picker)
+                  Relevant Submission Month / Date (Calendar Picker)
                 </label>
                 <div className="flex items-center space-x-2">
                   <input
-                    type="month"
-                    value={formData.relevant_submission_month?.includes('-') ? formData.relevant_submission_month : ''}
+                    type="date"
                     onChange={(e) => {
                       if (e.target.value) {
-                        const [yr, mo] = e.target.value.split('-');
-                        const dateObj = new Date(Number(yr), Number(mo) - 1, 1);
+                        const [yr, mo, dy] = e.target.value.split('-').map(Number);
+                        const dateObj = new Date(yr, mo - 1, dy);
+                        const dayNum = dateObj.getDate();
                         const monthName = dateObj.toLocaleString('en-US', { month: 'long' });
-                        setFormData({ ...formData, relevant_submission_month: `${monthName} ${yr}` });
+                        setFormData({ ...formData, relevant_submission_month: `${dayNum} ${monthName} ${yr}` });
                       }
                     }}
-                    className="bg-white border border-amber-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-sm"
-                    title="Click calendar icon to pick month & year"
+                    className="bg-white border border-amber-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-sm cursor-pointer"
+                    title="Click calendar icon to pick exact date (e.g. 12 November 2026)"
                   />
                   <input
                     type="text"
                     value={formData.relevant_submission_month || ''}
                     onChange={(e) => setFormData({ ...formData, relevant_submission_month: e.target.value })}
                     className="flex-1 bg-white border border-amber-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none shadow-sm"
-                    placeholder="e.g. August 2026 or select from calendar picker on left"
+                    placeholder="e.g. 12 November 2026 or select from calendar picker on left"
                   />
                 </div>
               </div>
