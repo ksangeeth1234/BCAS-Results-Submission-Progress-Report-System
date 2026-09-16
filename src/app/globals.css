@@ -6,6 +6,20 @@
   body {
     @apply bg-slate-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-blue-500 selection:text-white;
   }
+
+  /* Force all form input fields, selects, textareas to use black text font color */
+  input,
+  select,
+  textarea {
+    color: #000000 !important;
+    font-weight: 500;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #64748b !important;
+    font-weight: 400;
+  }
 }
 
 /* Custom Scrollbars */

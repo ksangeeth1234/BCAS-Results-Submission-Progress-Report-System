@@ -175,10 +175,10 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                 <select
                   value={formData.report_month}
                   onChange={(e) => setFormData({ ...formData, report_month: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   {MONTHS.map((m) => (
-                    <option key={m} value={m}>
+                    <option key={m} value={m} className="text-black">
                       {m}
                     </option>
                   ))}
@@ -192,10 +192,10 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                 <select
                   value={formData.report_year}
                   onChange={(e) => setFormData({ ...formData, report_year: Number(e.target.value) })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   {YEARS.map((y) => (
-                    <option key={y} value={y}>
+                    <option key={y} value={y} className="text-black">
                       {y}
                     </option>
                   ))}
@@ -209,10 +209,10 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                 <select
                   value={formData.department}
                   onChange={(e) => handleDepartmentChange(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none font-semibold text-slate-800"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 font-extrabold text-black focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   {OFFICIAL_DEPARTMENTS.map((d) => (
-                    <option key={d.name} value={d.name}>
+                    <option key={d.name} value={d.name} className="text-black font-semibold">
                       {d.name}
                     </option>
                   ))}
@@ -229,7 +229,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   type="text"
                   value={formData.faculty || ''}
                   onChange={(e) => setFormData({ ...formData, faculty: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="e.g. Faculty of Computer Science"
                 />
               </div>
@@ -243,7 +243,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   list="programs-list"
                   value={formData.program || ''}
                   onChange={(e) => setFormData({ ...formData, program: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Select or enter program title"
                 />
                 <datalist id="programs-list">
@@ -273,7 +273,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   list="coordinators-list"
                   value={formData.coordinator || ''}
                   onChange={(e) => setFormData({ ...formData, coordinator: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Coordinator Name"
                 />
                 <datalist id="coordinators-list">
@@ -291,10 +291,10 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                 <select
                   value={formData.semester}
                   onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   {SEMESTERS.map((s) => (
-                    <option key={s} value={s}>
+                    <option key={s} value={s} className="text-black">
                       {s}
                     </option>
                   ))}
@@ -309,7 +309,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   type="text"
                   value={formData.eligible_batch || ''}
                   onChange={(e) => setFormData({ ...formData, eligible_batch: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="e.g. Batch 21 (2024 Int)"
                 />
                 {errors.eligible_batch && <span className="text-[10px] text-rose-500 mt-0.5">{errors.eligible_batch}</span>}
@@ -344,9 +344,9 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                     className="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500"
                   />
                   <div>
-                    <div className="text-xs font-bold text-slate-900">Progress - Submitted</div>
-                    <div className="text-[10px] text-slate-500">
-                      Display on report: <span className="font-bold text-emerald-700">{formData.progress_submitted ? 'Yes' : 'No'}</span>
+                    <div className="text-xs font-bold text-black">Progress - Submitted</div>
+                    <div className="text-[10px] text-slate-600">
+                      Display on report: <span className="font-extrabold text-emerald-800">{formData.progress_submitted ? 'Yes' : 'No'}</span>
                     </div>
                   </div>
                 </label>
@@ -365,9 +365,9 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                     className="w-4 h-4 text-rose-600 rounded border-slate-300 focus:ring-rose-500"
                   />
                   <div>
-                    <div className="text-xs font-bold text-slate-900">Progress - Not Submitted</div>
-                    <div className="text-[10px] text-slate-500">
-                      Display on report: <span className="font-bold text-rose-700">{formData.progress_not_submitted ? 'Yes' : 'No'}</span>
+                    <div className="text-xs font-bold text-black">Progress - Not Submitted</div>
+                    <div className="text-[10px] text-slate-600">
+                      Display on report: <span className="font-extrabold text-rose-800">{formData.progress_not_submitted ? 'Yes' : 'No'}</span>
                     </div>
                   </div>
                 </label>
@@ -388,7 +388,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   type="text"
                   value={formData.relevant_submission_month || ''}
                   onChange={(e) => setFormData({ ...formData, relevant_submission_month: e.target.value })}
-                  className="w-full bg-white border border-amber-300 rounded-xl text-xs py-2 px-3 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  className="w-full bg-white border border-amber-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-none"
                   placeholder="e.g. August 2026"
                 />
               </div>
@@ -408,9 +408,9 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                     className="w-4 h-4 text-amber-600 rounded border-slate-300 focus:ring-amber-500"
                   />
                   <div>
-                    <div className="text-xs font-bold text-slate-900">Delays - Submitted</div>
-                    <div className="text-[10px] text-slate-500">
-                      Display on report: <span className="font-bold text-amber-700">{formData.delay_submitted ? 'Yes' : 'No'}</span>
+                    <div className="text-xs font-bold text-black">Delays - Submitted</div>
+                    <div className="text-[10px] text-slate-600">
+                      Display on report: <span className="font-extrabold text-amber-800">{formData.delay_submitted ? 'Yes' : 'No'}</span>
                     </div>
                   </div>
                 </label>
@@ -429,9 +429,9 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                     className="w-4 h-4 text-purple-600 rounded border-slate-300 focus:ring-purple-500"
                   />
                   <div>
-                    <div className="text-xs font-bold text-slate-900">Delays - Not Yet Submitted</div>
-                    <div className="text-[10px] text-slate-500">
-                      Display on report: <span className="font-bold text-purple-700">{formData.delay_not_yet_submitted ? 'Yes' : 'No'}</span>
+                    <div className="text-xs font-bold text-black">Delays - Not Yet Submitted</div>
+                    <div className="text-[10px] text-slate-600">
+                      Display on report: <span className="font-extrabold text-purple-800">{formData.delay_not_yet_submitted ? 'Yes' : 'No'}</span>
                     </div>
                   </div>
                 </label>
@@ -446,7 +446,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
               rows={2}
               value={formData.remarks || ''}
               onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs p-3 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs p-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="e.g. Approved by BOE or pending moderation"
             />
           </div>

@@ -1,23 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Database, Copy, Check, Sparkles, ShieldCheck, AlertCircle } from 'lucide-react';
-import { seedSupabaseSampleData } from '../lib/supabaseClient';
+import { X, Database, Copy, Check, ShieldCheck } from 'lucide-react';
 
 interface SqlSetupModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onRefreshData: () => Promise<void>;
+  onRefreshData?: () => Promise<void>;
 }
 
 export const SqlSetupModal: React.FC<SqlSetupModalProps> = ({
   isOpen,
   onClose,
-  onRefreshData,
 }) => {
   const [copied, setCopied] = useState(false);
-  const [seeding, setSeeding] = useState(false);
-  const [seedMessage, setSeedMessage] = useState<string | null>(null);
 
   const sqlScript = `-- BCAS Results Submission Progress Report System Schema
 -- Table: results_submission_progress
@@ -45,7 +41,13 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
 -- Enable Row Level Security (RLS)
 ALTER TABLE results_submission_progress ENABLE ROW LEVEL SECURITY;
 
--- Set Public Row Level Security policies for client REST API operations
+-- Drop existing policies if re-running
+DROP POLICY IF EXISTS "Allow public select" ON results_submission_progress;
+DROP POLICY IF EXISTS "Allow public insert" ON results_submission_progress;
+DROP POLICY IF EXISTS "Allow public update" ON results_submission_progress;
+DROP POLICY IF EXISTS "Allow public delete" ON results_submission_progress;
+
+-- Create Public Row Level Security policies
 CREATE POLICY "Allow public select" 
     ON results_submission_progress FOR SELECT USING (true);
 
@@ -65,20 +67,6 @@ CREATE POLICY "Allow public delete"
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const handleSeed = async () => {
-    setSeeding(true);
-    setSeedMessage(null);
-    try {
-      const res = await seedSupabaseSampleData();
-      setSeedMessage(res.message);
-      await onRefreshData();
-    } catch (err: any) {
-      setSeedMessage(`Error: ${err.message}`);
-    } finally {
-      setSeeding(false);
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -92,7 +80,7 @@ CREATE POLICY "Allow public delete"
             </div>
             <div>
               <h2 className="text-lg font-bold">Supabase PostgreSQL Database Setup</h2>
-              <p className="text-xs text-slate-400">SQL Schema Script & Seed Data Helper</p>
+              <p className="text-xs text-slate-400">SQL Schema Script Helper</p>
             </div>
           </div>
           <button
@@ -136,37 +124,6 @@ CREATE POLICY "Allow public delete"
             <pre className="bg-slate-950 text-slate-200 p-4 rounded-xl text-xs font-mono overflow-x-auto border border-slate-800 max-h-56 leading-relaxed">
               {sqlScript}
             </pre>
-          </div>
-
-          {/* Seed Data Button */}
-          <div className="bg-amber-50/60 border border-amber-200 rounded-xl p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-xs font-bold text-amber-950 flex items-center space-x-1.5">
-                  <Sparkles className="w-4 h-4 text-amber-600" />
-                  <span>Seed Realistic Sample Data</span>
-                </h4>
-                <p className="text-[11px] text-amber-800 mt-0.5">
-                  Populates sample records across all 10 official departments with Yes/No checkboxes.
-                </p>
-              </div>
-
-              <button
-                onClick={handleSeed}
-                disabled={seeding}
-                className="flex items-center space-x-1.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow-md transition-all disabled:opacity-50"
-              >
-                <Database className="w-3.5 h-3.5" />
-                <span>{seeding ? 'Seeding...' : 'Seed Sample Data'}</span>
-              </button>
-            </div>
-
-            {seedMessage && (
-              <div className="bg-white border border-amber-300 p-2.5 rounded-lg text-xs font-medium text-amber-900 flex items-center space-x-2">
-                <AlertCircle className="w-4 h-4 text-amber-600" />
-                <span>{seedMessage}</span>
-              </div>
-            )}
           </div>
         </div>
 

@@ -1,348 +1,126 @@
-import { createClient } from '@supabase/supabase-js';
 import { ResultsSubmissionRecord } from './types';
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://tqvsqfchxgmvjoueduyp.supabase.co';
+const SUPABASE_BASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://tqvsqfchxgmvjoueduyp.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_OfikpzTmaJ4iypNI76cAKA_7xvhWwtW';
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Supabase REST API Endpoint URL
+const REST_API_ENDPOINT = `${SUPABASE_BASE_URL.replace(/\/$/, '')}/rest/v1/results_submission_progress`;
 
-const LOCAL_STORAGE_KEY = 'bcas_results_submission_progress_data_v2';
-
-// Initial sample data with Yes/No boolean checkboxes
-export const INITIAL_SAMPLE_RECORDS: ResultsSubmissionRecord[] = [
-  {
-    id: 1,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Computer Science & Information Technology',
-    department: 'Computing',
-    program: 'BSc (Hons) Computer Science',
-    coordinator: 'Dr. A. R. Perera',
-    semester: 'Semester 4',
-    eligible_batch: 'Batch 21 (2024 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'August 2026',
-    delay_submitted: true,
-    delay_not_yet_submitted: false,
-    remarks: 'Approved by Board of Examiners on 12th Sept',
-  },
-  {
-    id: 2,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Computer Science & Information Technology',
-    department: 'Computing',
-    program: 'HND in Computing & Systems Development',
-    coordinator: 'Mr. K. L. Fernando',
-    semester: 'Semester 2',
-    eligible_batch: 'Batch 23 (2025 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'September 2026',
-    delay_submitted: false,
-    delay_not_yet_submitted: false,
-    remarks: 'All module results submitted on schedule',
-  },
-  {
-    id: 3,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Management & Business Studies',
-    department: 'Business Management',
-    program: 'BBA (Hons) Business Administration',
-    coordinator: 'Prof. M. S. Silva',
-    semester: 'Semester 6',
-    eligible_batch: 'Batch 19 (2023 Int)',
-    progress_submitted: false,
-    progress_not_submitted: true,
-    relevant_submission_month: 'July 2026',
-    delay_submitted: true,
-    delay_not_yet_submitted: false,
-    remarks: 'Pending 1 external examiner moderation report',
-  },
-  {
-    id: 4,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Management & Business Studies',
-    department: 'Business Management',
-    program: 'MBA International Business',
-    coordinator: 'Ms. N. D. Jayawardena',
-    semester: 'Semester 3',
-    eligible_batch: 'MBA Cohort 8',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'August 2026',
-    delay_submitted: false,
-    delay_not_yet_submitted: false,
-    remarks: 'Dissertation viva panel scheduled',
-  },
-  {
-    id: 5,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Health & Life Sciences',
-    department: 'Biomedical Science',
-    program: 'BSc (Hons) Biomedical Science',
-    coordinator: 'Dr. T. M. Rajapaksha',
-    semester: 'Semester 5',
-    eligible_batch: 'Batch 18 (2023 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'August 2026',
-    delay_submitted: true,
-    delay_not_yet_submitted: false,
-    remarks: 'Laboratory practical assessments verified',
-  },
-  {
-    id: 6,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Engineering & Built Environment',
-    department: 'Construction & Built Environment',
-    program: 'BSc (Hons) Quantity Surveying',
-    coordinator: 'Mr. S. K. De Silva',
-    semester: 'Semester 4',
-    eligible_batch: 'Batch 14 (2024 Int)',
-    progress_submitted: false,
-    progress_not_submitted: true,
-    relevant_submission_month: 'July 2026',
-    delay_submitted: false,
-    delay_not_yet_submitted: true,
-    remarks: 'Costing module re-sit results pending',
-  },
-  {
-    id: 7,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Law & Legal Studies',
-    department: 'Law',
-    program: 'LLB (Hons) Law',
-    coordinator: 'Ms. R. P. Wickramasinghe',
-    semester: 'Semester 2',
-    eligible_batch: 'Batch 12 (2025 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'September 2026',
-    delay_submitted: false,
-    delay_not_yet_submitted: false,
-    remarks: 'Moot court evaluation completed',
-  },
-  {
-    id: 8,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Health & Life Sciences',
-    department: 'Nursing',
-    program: 'BSc (Hons) Nursing Studies',
-    coordinator: 'Dr. H. N. Gunawardena',
-    semester: 'Semester 3',
-    eligible_batch: 'Batch 9 (2024 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'August 2026',
-    delay_submitted: true,
-    delay_not_yet_submitted: false,
-    remarks: 'Clinical placement logs verified',
-  },
-  {
-    id: 9,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Education & Social Sciences',
-    department: 'Psychology',
-    program: 'BSc (Hons) Applied Psychology',
-    coordinator: 'Dr. A. R. Perera',
-    semester: 'Semester 1',
-    eligible_batch: 'Batch 7 (2026 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'September 2026',
-    delay_submitted: false,
-    delay_not_yet_submitted: false,
-    remarks: 'First semester grades finalized',
-  },
-  {
-    id: 10,
-    report_month: 'September',
-    report_year: 2026,
-    faculty: 'Faculty of Hospitality & Tourism',
-    department: 'Hotel Management',
-    program: 'HND in Hospitality & Tourism Management',
-    coordinator: 'Mr. K. L. Fernando',
-    semester: 'Semester 4',
-    eligible_batch: 'Batch 10 (2024 Int)',
-    progress_submitted: true,
-    progress_not_submitted: false,
-    relevant_submission_month: 'August 2026',
-    delay_submitted: true,
-    delay_not_yet_submitted: false,
-    remarks: 'Food & Beverage practical passed',
-  }
-];
-
-function isSupabaseConfigured(): boolean {
-  return Boolean(SUPABASE_ANON_KEY) && SUPABASE_ANON_KEY.length > 10;
-}
-
-// Read all records
-export async function fetchAllRecords(): Promise<{ data: ResultsSubmissionRecord[]; error: string | null; isFallback: boolean }> {
-  if (isSupabaseConfigured()) {
-    try {
-      const { data, error } = await supabase
-        .from('results_submission_progress')
-        .select('*')
-        .order('id', { ascending: true });
-
-      if (error) {
-        console.warn('Supabase fetch notice, using local storage sync:', error.message);
-        return { data: getLocalRecords(), error: null, isFallback: true };
-      }
-
-      if (data && data.length > 0) {
-        return { data: data as ResultsSubmissionRecord[], error: null, isFallback: false };
-      } else {
-        return { data: getLocalRecords(), error: null, isFallback: true };
-      }
-    } catch (err: any) {
-      console.warn('Supabase query failed, using local storage:', err.message);
-      return { data: getLocalRecords(), error: null, isFallback: true };
-    }
-  }
-
-  return { data: getLocalRecords(), error: null, isFallback: true };
-}
-
-// Add a new record
-export async function addRecord(record: Omit<ResultsSubmissionRecord, 'id' | 'created_at' | 'updated_at'>): Promise<{ data: ResultsSubmissionRecord | null; error: string | null }> {
-  if (isSupabaseConfigured()) {
-    try {
-      const { data, error } = await supabase
-        .from('results_submission_progress')
-        .insert([record])
-        .select()
-        .single();
-
-      if (!error && data) {
-        return { data: data as ResultsSubmissionRecord, error: null };
-      }
-    } catch (e: any) {
-      console.warn('Supabase insert notice, saving locally:', e.message);
-    }
-  }
-
-  const local = getLocalRecords();
-  const nextId = local.length > 0 ? Math.max(...local.map((r) => r.id || 0)) + 1 : 1;
-  const newRecord: ResultsSubmissionRecord = {
-    ...record,
-    id: nextId,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+// HTTP Headers for Supabase REST API
+function getSupabaseHeaders(): Record<string, string> {
+  return {
+    'apikey': SUPABASE_ANON_KEY,
+    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=representation',
   };
-  const updated = [newRecord, ...local];
-  saveLocalRecords(updated);
-  return { data: newRecord, error: null };
 }
 
-// Update existing record
-export async function updateRecord(id: number, record: Partial<ResultsSubmissionRecord>): Promise<{ data: ResultsSubmissionRecord | null; error: string | null }> {
-  if (isSupabaseConfigured()) {
-    try {
-      const { data, error } = await supabase
-        .from('results_submission_progress')
-        .update({ ...record, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .select()
-        .single();
+// 1. READ ALL RECORDS (GET)
+export async function fetchAllRecords(): Promise<{ data: ResultsSubmissionRecord[]; error: string | null; isFallback: boolean }> {
+  try {
+    const response = await fetch(`${REST_API_ENDPOINT}?select=*&order=id.asc`, {
+      method: 'GET',
+      headers: getSupabaseHeaders(),
+      cache: 'no-store',
+    });
 
-      if (!error && data) {
-        return { data: data as ResultsSubmissionRecord, error: null };
-      }
-    } catch (e: any) {
-      console.warn('Supabase update notice, updating locally:', e.message);
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Supabase REST GET error:', response.status, errText);
+      return { data: [], error: `Supabase Error (${response.status}): ${errText}`, isFallback: false };
     }
-  }
 
-  const local = getLocalRecords();
-  const index = local.findIndex((r) => r.id === id);
-  if (index !== -1) {
-    local[index] = {
-      ...local[index],
+    const data = await response.json();
+    return { data: data as ResultsSubmissionRecord[], error: null, isFallback: false };
+  } catch (err: any) {
+    console.error('Supabase REST GET exception:', err.message);
+    return { data: [], error: err.message, isFallback: false };
+  }
+}
+
+// 2. ADD A NEW RECORD (POST)
+export async function addRecord(record: Omit<ResultsSubmissionRecord, 'id' | 'created_at' | 'updated_at'>): Promise<{ data: ResultsSubmissionRecord | null; error: string | null }> {
+  try {
+    const payload = {
+      ...record,
+      progress_submitted: Boolean(record.progress_submitted),
+      progress_not_submitted: Boolean(record.progress_not_submitted),
+      delay_submitted: Boolean(record.delay_submitted),
+      delay_not_yet_submitted: Boolean(record.delay_not_yet_submitted),
+    };
+
+    const response = await fetch(REST_API_ENDPOINT, {
+      method: 'POST',
+      headers: getSupabaseHeaders(),
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Supabase REST POST error:', response.status, errText);
+      return { data: null, error: `Supabase Error (${response.status}): ${errText}` };
+    }
+
+    const data = await response.json();
+    const createdRecord = Array.isArray(data) ? data[0] : data;
+    return { data: createdRecord as ResultsSubmissionRecord, error: null };
+  } catch (err: any) {
+    console.error('Supabase REST POST exception:', err.message);
+    return { data: null, error: err.message };
+  }
+}
+
+// 3. UPDATE RECORD (PATCH)
+export async function updateRecord(id: number, record: Partial<ResultsSubmissionRecord>): Promise<{ data: ResultsSubmissionRecord | null; error: string | null }> {
+  try {
+    const payload: any = {
       ...record,
       updated_at: new Date().toISOString(),
     };
-    saveLocalRecords(local);
-    return { data: local[index], error: null };
-  }
-  return { data: null, error: 'Record not found' };
-}
+    if ('progress_submitted' in record) payload.progress_submitted = Boolean(record.progress_submitted);
+    if ('progress_not_submitted' in record) payload.progress_not_submitted = Boolean(record.progress_not_submitted);
+    if ('delay_submitted' in record) payload.delay_submitted = Boolean(record.delay_submitted);
+    if ('delay_not_yet_submitted' in record) payload.delay_not_yet_submitted = Boolean(record.delay_not_yet_submitted);
 
-// Delete a record
-export async function deleteRecord(id: number): Promise<{ success: boolean; error: string | null }> {
-  if (isSupabaseConfigured()) {
-    try {
-      const { error } = await supabase
-        .from('results_submission_progress')
-        .delete()
-        .eq('id', id);
+    const response = await fetch(`${REST_API_ENDPOINT}?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: getSupabaseHeaders(),
+      body: JSON.stringify(payload),
+    });
 
-      if (!error) {
-        return { success: true, error: null };
-      }
-    } catch (e: any) {
-      console.warn('Supabase delete notice:', e.message);
-    }
-  }
-
-  const local = getLocalRecords();
-  const filtered = local.filter((r) => r.id !== id);
-  saveLocalRecords(filtered);
-  return { success: true, error: null };
-}
-
-// Seed sample data into Supabase
-export async function seedSupabaseSampleData(): Promise<{ success: boolean; message: string }> {
-  if (!isSupabaseConfigured()) {
-    saveLocalRecords(INITIAL_SAMPLE_RECORDS);
-    return { success: true, message: 'Sample data loaded locally.' };
-  }
-
-  try {
-    const { error } = await supabase
-      .from('results_submission_progress')
-      .insert(INITIAL_SAMPLE_RECORDS.map(({ id, ...rest }) => rest));
-
-    if (error) {
-      return { success: false, message: `Failed to seed Supabase: ${error.message}` };
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Supabase REST PATCH error:', response.status, errText);
+      return { data: null, error: `Supabase Error (${response.status}): ${errText}` };
     }
 
-    return { success: true, message: 'Successfully seeded sample records into Supabase!' };
+    const data = await response.json();
+    const updatedRecord = Array.isArray(data) ? data[0] : data;
+    return { data: updatedRecord as ResultsSubmissionRecord, error: null };
   } catch (err: any) {
-    return { success: false, message: `Seeding error: ${err.message}` };
+    console.error('Supabase REST PATCH exception:', err.message);
+    return { data: null, error: err.message };
   }
 }
 
-function getLocalRecords(): ResultsSubmissionRecord[] {
-  if (typeof window === 'undefined') return INITIAL_SAMPLE_RECORDS;
+// 4. DELETE RECORD (DELETE)
+export async function deleteRecord(id: number): Promise<{ success: boolean; error: string | null }> {
   try {
-    const item = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!item) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_SAMPLE_RECORDS));
-      return INITIAL_SAMPLE_RECORDS;
-    }
-    return JSON.parse(item);
-  } catch {
-    return INITIAL_SAMPLE_RECORDS;
-  }
-}
+    const response = await fetch(`${REST_API_ENDPOINT}?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: getSupabaseHeaders(),
+    });
 
-function saveLocalRecords(records: ResultsSubmissionRecord[]) {
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(records));
-    } catch (e) {
-      console.error('Failed to save to local storage', e);
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Supabase REST DELETE error:', response.status, errText);
+      return { success: false, error: `Supabase Error (${response.status}): ${errText}` };
     }
+
+    return { success: true, error: null };
+  } catch (err: any) {
+    console.error('Supabase REST DELETE exception:', err.message);
+    return { success: false, error: err.message };
   }
 }
