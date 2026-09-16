@@ -1,7 +1,7 @@
 import { ResultsSubmissionRecord } from './types';
 
-const SUPABASE_BASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://tqvsqfchxgmvjoueduyp.supabase.co';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_OfikpzTmaJ4iypNI76cAKA_7xvhWwtW';
+const SUPABASE_BASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://gogfkoylllfybwqluqyi.supabase.co';
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_g_KgS_zrVR18tTSRHN2T7g_IOEHTNK_';
 
 // Supabase REST API Endpoint URL
 const REST_API_ENDPOINT = `${SUPABASE_BASE_URL.replace(/\/$/, '')}/rest/v1/results_submission_progress`;
