@@ -29,21 +29,21 @@ export async function exportToExcel(
     };
 
     // Header Titles
-    worksheet.mergeCells('A1:M1');
+    worksheet.mergeCells('A1:N1');
     const titleCell = worksheet.getCell('A1');
     titleCell.value = 'BCAS Campus';
     titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FF0A2540' } };
     titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(1).height = 30;
 
-    worksheet.mergeCells('A2:M2');
+    worksheet.mergeCells('A2:N2');
     const subTitleCell = worksheet.getCell('A2');
     subTitleCell.value = 'Progression of Results submission to the Board of Examiners Monthly wise';
     subTitleCell.font = { name: 'Arial', size: 12, bold: true, italic: true, color: { argb: 'FF1A4066' } };
     subTitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(2).height = 24;
 
-    worksheet.mergeCells('A3:M3');
+    worksheet.mergeCells('A3:N3');
     const dateCell = worksheet.getCell('A3');
     dateCell.value = `Reporting Period: ${month} ${year}`;
     dateCell.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF333333' } };
@@ -59,9 +59,10 @@ export async function exportToExcel(
       { col: 'B', name: 'Faculty' },
       { col: 'C', name: 'Department' },
       { col: 'D', name: 'Program' },
-      { col: 'E', name: 'Coordinator' },
-      { col: 'F', name: 'Semester/s' },
-      { col: 'G', name: 'Eligible Batch for this month as per the Academic Calendar' },
+      { col: 'E', name: 'Module' },
+      { col: 'F', name: 'Coordinator' },
+      { col: 'G', name: 'Semester/s' },
+      { col: 'H', name: 'Eligible Batch for this month as per the Academic Calendar' },
     ];
 
     mainHeaders.forEach(({ col, name }) => {
@@ -70,33 +71,33 @@ export async function exportToExcel(
       cell.value = name;
     });
 
-    // Grouped Header: Progress (H5:I5)
-    worksheet.mergeCells('H5:I5');
-    const progressHeader = worksheet.getCell('H5');
+    // Grouped Header: Progress (I5:J5)
+    worksheet.mergeCells('I5:J5');
+    const progressHeader = worksheet.getCell('I5');
     progressHeader.value = 'Progress';
 
-    worksheet.mergeCells('H6:H7');
-    worksheet.getCell('H6').value = 'Submitted';
     worksheet.mergeCells('I6:I7');
-    worksheet.getCell('I6').value = 'Not submitted';
+    worksheet.getCell('I6').value = 'Submitted';
+    worksheet.mergeCells('J6:J7');
+    worksheet.getCell('J6').value = 'Not submitted';
 
-    // Grouped Header: Delays for submission (J5:L5)
-    worksheet.mergeCells('J5:L5');
-    const delayHeader = worksheet.getCell('J5');
+    // Grouped Header: Delays for submission (K5:M5)
+    worksheet.mergeCells('K5:M5');
+    const delayHeader = worksheet.getCell('K5');
     delayHeader.value = 'Delays for submission';
 
     // Row 6 under Delays: Relevant month, Submitted, Not yet submitted
-    worksheet.mergeCells('J6:J7');
-    worksheet.getCell('J6').value = 'Relevant month to be submitted as per the academic calendar';
-
     worksheet.mergeCells('K6:K7');
-    worksheet.getCell('K6').value = 'Submitted';
+    worksheet.getCell('K6').value = 'Relevant month to be submitted as per the academic calendar';
 
     worksheet.mergeCells('L6:L7');
-    worksheet.getCell('L6').value = 'Not yet submitted';
+    worksheet.getCell('L6').value = 'Submitted';
 
-    worksheet.mergeCells('M5:M7');
-    worksheet.getCell('M5').value = 'Remarks';
+    worksheet.mergeCells('M6:M7');
+    worksheet.getCell('M6').value = 'Not yet submitted';
+
+    worksheet.mergeCells('N5:N7');
+    worksheet.getCell('N5').value = 'Remarks';
 
     // Header Fill
     const headerFill: any = {
@@ -114,7 +115,7 @@ export async function exportToExcel(
 
     for (let r = 5; r <= 7; r++) {
       worksheet.getRow(r).height = 24;
-      for (let c = 1; c <= 13; c++) {
+      for (let c = 1; c <= 14; c++) {
         const cell = worksheet.getRow(r).getCell(c);
         cell.fill = headerFill;
         cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFF' } };
@@ -145,7 +146,7 @@ export async function exportToExcel(
       const bgArgb = 'FF' + config.excelHex;
 
       // Department Header Banner
-      worksheet.mergeCells(`A${currentRow}:M${currentRow}`);
+      worksheet.mergeCells(`A${currentRow}:N${currentRow}`);
       const deptBanner = worksheet.getCell(`A${currentRow}`);
       deptBanner.value = `DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)`;
       deptBanner.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF0A2540' } };
@@ -168,17 +169,18 @@ export async function exportToExcel(
         row.getCell(2).value = rec.faculty;
         row.getCell(3).value = rec.department;
         row.getCell(4).value = rec.program;
-        row.getCell(5).value = rec.coordinator;
-        row.getCell(6).value = rec.semester;
-        row.getCell(7).value = rec.eligible_batch;
-        row.getCell(8).value = formatYesNo(rec.progress_submitted);
-        row.getCell(9).value = formatYesNo(rec.progress_not_submitted);
-        row.getCell(10).value = rec.relevant_submission_month || '-';
-        row.getCell(11).value = formatYesNo(rec.delay_submitted);
-        row.getCell(12).value = formatYesNo(rec.delay_not_yet_submitted);
-        row.getCell(13).value = rec.remarks || '-';
+        row.getCell(5).value = rec.module || '-';
+        row.getCell(6).value = rec.coordinator;
+        row.getCell(7).value = rec.semester;
+        row.getCell(8).value = rec.eligible_batch;
+        row.getCell(9).value = formatYesNo(rec.progress_submitted);
+        row.getCell(10).value = formatYesNo(rec.progress_not_submitted);
+        row.getCell(11).value = rec.relevant_submission_month || '-';
+        row.getCell(12).value = formatYesNo(rec.delay_submitted);
+        row.getCell(13).value = formatYesNo(rec.delay_not_yet_submitted);
+        row.getCell(14).value = rec.remarks || '-';
 
-        for (let c = 1; c <= 13; c++) {
+        for (let c = 1; c <= 14; c++) {
           const cell = row.getCell(c);
           cell.fill = {
             type: 'pattern',
@@ -188,9 +190,9 @@ export async function exportToExcel(
           cell.border = borderStyle;
           cell.font = { name: 'Arial', size: 9.5 };
 
-          if ([1, 8, 9, 10, 11, 12].includes(c)) {
+          if ([1, 9, 10, 11, 12, 13].includes(c)) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
-            if ([8, 9, 11, 12].includes(c) && cell.value === 'Yes') {
+            if ([9, 10, 12, 13].includes(c) && cell.value === 'Yes') {
               cell.font = { name: 'Arial', size: 9.5, bold: true };
             }
           } else {
@@ -215,20 +217,20 @@ export async function exportToExcel(
       const subRow = worksheet.getRow(currentRow);
       subRow.height = 22;
 
-      worksheet.mergeCells(`A${currentRow}:G${currentRow}`);
+      worksheet.mergeCells(`A${currentRow}:H${currentRow}`);
       const subLabel = worksheet.getCell(`A${currentRow}`);
       subLabel.value = `Total Yes for ${deptName}:`;
       subLabel.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF0A2540' } };
       subLabel.alignment = { horizontal: 'right', vertical: 'middle' };
 
-      subRow.getCell(8).value = `${deptSubtotal.ps} Yes`;
-      subRow.getCell(9).value = `${deptSubtotal.pns} Yes`;
-      subRow.getCell(10).value = '-';
-      subRow.getCell(11).value = `${deptSubtotal.ds} Yes`;
-      subRow.getCell(12).value = `${deptSubtotal.dnys} Yes`;
-      subRow.getCell(13).value = '-';
+      subRow.getCell(9).value = `${deptSubtotal.ps} Yes`;
+      subRow.getCell(10).value = `${deptSubtotal.pns} Yes`;
+      subRow.getCell(11).value = '-';
+      subRow.getCell(12).value = `${deptSubtotal.ds} Yes`;
+      subRow.getCell(13).value = `${deptSubtotal.dnys} Yes`;
+      subRow.getCell(14).value = '-';
 
-      for (let c = 1; c <= 13; c++) {
+      for (let c = 1; c <= 14; c++) {
         const cell = subRow.getCell(c);
         cell.fill = {
           type: 'pattern',
@@ -237,7 +239,7 @@ export async function exportToExcel(
         };
         cell.border = borderStyle;
         cell.font = { name: 'Arial', size: 10, bold: true };
-        if ([8, 9, 10, 11, 12].includes(c)) {
+        if ([9, 10, 11, 12, 13].includes(c)) {
           cell.alignment = { horizontal: 'center', vertical: 'middle' };
         }
       }
@@ -247,18 +249,19 @@ export async function exportToExcel(
 
     // Column Widths
     worksheet.getColumn(1).width = 6;
-    worksheet.getColumn(2).width = 25;
-    worksheet.getColumn(3).width = 24;
-    worksheet.getColumn(4).width = 28;
-    worksheet.getColumn(5).width = 20;
-    worksheet.getColumn(6).width = 16;
-    worksheet.getColumn(7).width = 22;
-    worksheet.getColumn(8).width = 14;
-    worksheet.getColumn(9).width = 16;
-    worksheet.getColumn(10).width = 22;
-    worksheet.getColumn(11).width = 14;
-    worksheet.getColumn(12).width = 18;
-    worksheet.getColumn(13).width = 25;
+    worksheet.getColumn(2).width = 24;
+    worksheet.getColumn(3).width = 22;
+    worksheet.getColumn(4).width = 26;
+    worksheet.getColumn(5).width = 24;
+    worksheet.getColumn(6).width = 20;
+    worksheet.getColumn(7).width = 16;
+    worksheet.getColumn(8).width = 22;
+    worksheet.getColumn(9).width = 14;
+    worksheet.getColumn(10).width = 16;
+    worksheet.getColumn(11).width = 22;
+    worksheet.getColumn(12).width = 14;
+    worksheet.getColumn(13).width = 18;
+    worksheet.getColumn(14).width = 25;
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
@@ -298,7 +301,7 @@ function exportToExcelHtmlFallback(
 
     rowsHtml += `
       <tr style="background-color: ${bgHex}; font-weight: bold;">
-        <td colspan="13" style="padding: 8px; border: 1px solid #999;">DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)</td>
+        <td colspan="14" style="padding: 8px; border: 1px solid #999;">DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)</td>
       </tr>
     `;
 
@@ -309,6 +312,7 @@ function exportToExcelHtmlFallback(
           <td style="border: 1px solid #ccc;">${r.faculty}</td>
           <td style="border: 1px solid #ccc;">${r.department}</td>
           <td style="border: 1px solid #ccc; font-weight: bold;">${r.program}</td>
+          <td style="border: 1px solid #ccc;">${r.module || '-'}</td>
           <td style="border: 1px solid #ccc;">${r.coordinator}</td>
           <td style="text-align: center; border: 1px solid #ccc;">${r.semester}</td>
           <td style="border: 1px solid #ccc;">${r.eligible_batch}</td>
@@ -351,6 +355,7 @@ function exportToExcelHtmlFallback(
             <th rowspan="2">Faculty</th>
             <th rowspan="2">Department</th>
             <th rowspan="2">Program</th>
+            <th rowspan="2">Module</th>
             <th rowspan="2">Coordinator</th>
             <th rowspan="2">Semester/s</th>
             <th rowspan="2">Eligible Batch for this month as per Academic Calendar</th>

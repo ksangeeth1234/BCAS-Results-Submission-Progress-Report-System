@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
     faculty VARCHAR(150),
     department VARCHAR(150) NOT NULL,
     program VARCHAR(200) NOT NULL,
+    module VARCHAR(200),
     coordinator VARCHAR(150) NOT NULL,
     semester VARCHAR(100) NOT NULL,
     eligible_batch TEXT,
@@ -38,7 +39,8 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Ensure relevant_submission_month column exists if table already existed
+-- Ensure module and relevant_submission_month columns exist if table already existed
+ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS module VARCHAR(200);
 ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS relevant_submission_month VARCHAR(100);
 
 -- Enable Row Level Security (RLS)

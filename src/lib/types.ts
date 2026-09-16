@@ -5,6 +5,7 @@ export interface ResultsSubmissionRecord {
   faculty: string;
   department: string;
   program: string;
+  module: string;
   coordinator: string;
   semester: string;
   eligible_batch: string;

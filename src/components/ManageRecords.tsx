@@ -68,6 +68,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
       const q = filterState.search_query.toLowerCase();
       const match =
         r.program.toLowerCase().includes(q) ||
+        (r.module && r.module.toLowerCase().includes(q)) ||
         r.coordinator.toLowerCase().includes(q) ||
         r.department.toLowerCase().includes(q) ||
         r.eligible_batch.toLowerCase().includes(q) ||
@@ -156,7 +157,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                   setFilterState({ ...filterState, search_query: e.target.value });
                   setCurrentPage(1);
                 }}
-                placeholder="Search program, batch..."
+                placeholder="Search program, module, batch..."
                 className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 pl-9 pr-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
@@ -270,6 +271,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 <th className="p-3.5 text-center">#</th>
                 <th className="p-3.5">Department</th>
                 <th className="p-3.5">Program</th>
+                <th className="p-3.5">Module</th>
                 <th className="p-3.5">Coordinator</th>
                 <th className="p-3.5">Semester</th>
                 <th className="p-3.5">Eligible Batch</th>
@@ -290,7 +292,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
             <tbody className="divide-y divide-slate-100">
               {paginatedRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="p-8 text-center text-slate-400">
+                  <td colSpan={13} className="p-8 text-center text-slate-400">
                     No matching records found. Try adjusting your filters or search terms.
                   </td>
                 </tr>
@@ -319,6 +321,9 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                       </td>
                       <td className="p-3 font-semibold text-slate-900 max-w-[200px] truncate" title={r.program}>
                         {r.program}
+                      </td>
+                      <td className="p-3 font-medium text-slate-800 max-w-[180px] truncate" title={r.module}>
+                        {r.module || '-'}
                       </td>
                       <td className="p-3 text-slate-600">{r.coordinator}</td>
                       <td className="p-3 text-slate-600 font-medium">{r.semester}</td>

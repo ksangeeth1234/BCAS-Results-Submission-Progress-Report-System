@@ -42,6 +42,7 @@ export function exportToPdf(
       { content: 'Faculty', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Department', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Program', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
+      { content: 'Module', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Coordinator', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Semester/s', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Eligible Batch for this month as per Academic Calendar', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
@@ -74,7 +75,7 @@ export function exportToPdf(
     body.push([
       {
         content: `DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)`,
-        colSpan: 13,
+        colSpan: 14,
         styles: {
           fillColor: config.pdfRgb,
           textColor: [10, 37, 64],
@@ -93,6 +94,7 @@ export function exportToPdf(
           r.faculty,
           r.department,
           r.program,
+          r.module || '-',
           r.coordinator,
           r.semester,
           r.eligible_batch,
@@ -117,7 +119,7 @@ export function exportToPdf(
     );
 
     body.push([
-      { content: `Total Yes for ${deptName}:`, colSpan: 7, styles: { halign: 'right', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `Total Yes for ${deptName}:`, colSpan: 8, styles: { halign: 'right', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: `${subtotal.ps} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: `${subtotal.pns} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
@@ -134,8 +136,8 @@ export function exportToPdf(
     theme: 'grid',
     styles: {
       font: 'helvetica',
-      fontSize: 7.5,
-      cellPadding: 1.8,
+      fontSize: 7,
+      cellPadding: 1.5,
       lineColor: [200, 200, 200],
       lineWidth: 0.1,
       textColor: [30, 30, 30],
@@ -144,7 +146,7 @@ export function exportToPdf(
       fillColor: [10, 37, 64],
       textColor: [255, 255, 255],
       fontStyle: 'bold',
-      fontSize: 7.5,
+      fontSize: 7,
       halign: 'center',
       valign: 'middle',
     },
@@ -155,19 +157,20 @@ export function exportToPdf(
       }
     },
     columnStyles: {
-      0: { cellWidth: 7, halign: 'center' },
-      1: { cellWidth: 22 },
-      2: { cellWidth: 22 },
-      3: { cellWidth: 28 },
-      4: { cellWidth: 20 },
-      5: { cellWidth: 16 },
-      6: { cellWidth: 24 },
-      7: { cellWidth: 14, halign: 'center' },
-      8: { cellWidth: 16, halign: 'center' },
-      9: { cellWidth: 24, halign: 'center' },
-      10: { cellWidth: 14, halign: 'center' },
-      11: { cellWidth: 16, halign: 'center' },
-      12: { cellWidth: 24 },
+      0: { cellWidth: 6, halign: 'center' },
+      1: { cellWidth: 20 },
+      2: { cellWidth: 20 },
+      3: { cellWidth: 24 },
+      4: { cellWidth: 22 },
+      5: { cellWidth: 18 },
+      6: { cellWidth: 14 },
+      7: { cellWidth: 22 },
+      8: { cellWidth: 13, halign: 'center' },
+      9: { cellWidth: 15, halign: 'center' },
+      10: { cellWidth: 22, halign: 'center' },
+      11: { cellWidth: 13, halign: 'center' },
+      12: { cellWidth: 15, halign: 'center' },
+      13: { cellWidth: 22 },
     },
     margin: { top: 28, left: 10, right: 10, bottom: 15 },
     didDrawPage: (data) => {
