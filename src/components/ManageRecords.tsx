@@ -277,6 +277,9 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                   Prog. Sub.
                 </th>
                 <th className="p-3.5 text-center bg-rose-950/60 text-rose-300">Prog. Not Sub.</th>
+                <th className="p-3.5 text-center bg-amber-950/60 text-amber-200">
+                  Rel. Month (Cal.)
+                </th>
                 <th className="p-3.5 text-center bg-amber-950/60 text-amber-300">Delay Sub.</th>
                 <th className="p-3.5 text-center bg-purple-950/60 text-purple-300">
                   Delay Not Sub.
@@ -287,7 +290,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
             <tbody className="divide-y divide-slate-100">
               {paginatedRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="p-8 text-center text-slate-400">
+                  <td colSpan={12} className="p-8 text-center text-slate-400">
                     No matching records found. Try adjusting your filters or search terms.
                   </td>
                 </tr>
@@ -327,6 +330,10 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
 
                       <td className={`p-3 text-center font-bold ${pnsYes ? 'text-rose-700 bg-rose-100/50' : 'text-slate-400'}`}>
                         {pnsYes ? 'Yes' : 'No'}
+                      </td>
+
+                      <td className="p-3 text-center font-bold text-amber-950 bg-amber-50/60">
+                        {r.relevant_submission_month || '-'}
                       </td>
 
                       <td className={`p-3 text-center font-bold ${dsYes ? 'text-amber-700 bg-amber-100/50' : 'text-slate-400'}`}>

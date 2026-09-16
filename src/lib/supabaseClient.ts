@@ -44,6 +44,7 @@ export async function addRecord(record: Omit<ResultsSubmissionRecord, 'id' | 'cr
   try {
     const payload = {
       ...record,
+      relevant_submission_month: record.relevant_submission_month || '',
       progress_submitted: Boolean(record.progress_submitted),
       progress_not_submitted: Boolean(record.progress_not_submitted),
       delay_submitted: Boolean(record.delay_submitted),

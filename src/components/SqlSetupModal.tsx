@@ -38,6 +38,9 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Ensure relevant_submission_month column exists if table already existed
+ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS relevant_submission_month VARCHAR(100);
+
 -- Enable Row Level Security (RLS)
 ALTER TABLE results_submission_progress ENABLE ROW LEVEL SECURITY;
 

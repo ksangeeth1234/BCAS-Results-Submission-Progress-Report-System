@@ -29,21 +29,21 @@ export async function exportToExcel(
     };
 
     // Header Titles
-    worksheet.mergeCells('A1:L1');
+    worksheet.mergeCells('A1:M1');
     const titleCell = worksheet.getCell('A1');
     titleCell.value = 'BCAS Campus';
     titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FF0A2540' } };
     titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(1).height = 30;
 
-    worksheet.mergeCells('A2:L2');
+    worksheet.mergeCells('A2:M2');
     const subTitleCell = worksheet.getCell('A2');
     subTitleCell.value = 'Progression of Results submission to the Board of Examiners Monthly wise';
     subTitleCell.font = { name: 'Arial', size: 12, bold: true, italic: true, color: { argb: 'FF1A4066' } };
     subTitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(2).height = 24;
 
-    worksheet.mergeCells('A3:L3');
+    worksheet.mergeCells('A3:M3');
     const dateCell = worksheet.getCell('A3');
     dateCell.value = `Reporting Period: ${month} ${year}`;
     dateCell.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF333333' } };
@@ -85,15 +85,18 @@ export async function exportToExcel(
     const delayHeader = worksheet.getCell('J5');
     delayHeader.value = 'Delays for submission';
 
-    // Row 6 under Delays: Relevant month... (J6:K6)
-    worksheet.mergeCells('J6:K6');
+    // Row 6 under Delays: Relevant month, Submitted, Not yet submitted
+    worksheet.mergeCells('J6:J7');
     worksheet.getCell('J6').value = 'Relevant month to be submitted as per the academic calendar';
 
-    worksheet.getCell('J7').value = 'Submitted';
-    worksheet.getCell('K7').value = 'Not yet submitted';
+    worksheet.mergeCells('K6:K7');
+    worksheet.getCell('K6').value = 'Submitted';
 
-    worksheet.mergeCells('L5:L7');
-    worksheet.getCell('L5').value = 'Remarks';
+    worksheet.mergeCells('L6:L7');
+    worksheet.getCell('L6').value = 'Not yet submitted';
+
+    worksheet.mergeCells('M5:M7');
+    worksheet.getCell('M5').value = 'Remarks';
 
     // Header Fill
     const headerFill: any = {
@@ -111,7 +114,7 @@ export async function exportToExcel(
 
     for (let r = 5; r <= 7; r++) {
       worksheet.getRow(r).height = 24;
-      for (let c = 1; c <= 12; c++) {
+      for (let c = 1; c <= 13; c++) {
         const cell = worksheet.getRow(r).getCell(c);
         cell.fill = headerFill;
         cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFF' } };
@@ -142,7 +145,7 @@ export async function exportToExcel(
       const bgArgb = 'FF' + config.excelHex;
 
       // Department Header Banner
-      worksheet.mergeCells(`A${currentRow}:L${currentRow}`);
+      worksheet.mergeCells(`A${currentRow}:M${currentRow}`);
       const deptBanner = worksheet.getCell(`A${currentRow}`);
       deptBanner.value = `DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)`;
       deptBanner.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF0A2540' } };
@@ -170,11 +173,12 @@ export async function exportToExcel(
         row.getCell(7).value = rec.eligible_batch;
         row.getCell(8).value = formatYesNo(rec.progress_submitted);
         row.getCell(9).value = formatYesNo(rec.progress_not_submitted);
-        row.getCell(10).value = formatYesNo(rec.delay_submitted);
-        row.getCell(11).value = formatYesNo(rec.delay_not_yet_submitted);
-        row.getCell(12).value = rec.remarks || '-';
+        row.getCell(10).value = rec.relevant_submission_month || '-';
+        row.getCell(11).value = formatYesNo(rec.delay_submitted);
+        row.getCell(12).value = formatYesNo(rec.delay_not_yet_submitted);
+        row.getCell(13).value = rec.remarks || '-';
 
-        for (let c = 1; c <= 12; c++) {
+        for (let c = 1; c <= 13; c++) {
           const cell = row.getCell(c);
           cell.fill = {
             type: 'pattern',
@@ -184,9 +188,9 @@ export async function exportToExcel(
           cell.border = borderStyle;
           cell.font = { name: 'Arial', size: 9.5 };
 
-          if ([1, 8, 9, 10, 11].includes(c)) {
+          if ([1, 8, 9, 10, 11, 12].includes(c)) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
-            if ([8, 9, 10, 11].includes(c) && cell.value === 'Yes') {
+            if ([8, 9, 11, 12].includes(c) && cell.value === 'Yes') {
               cell.font = { name: 'Arial', size: 9.5, bold: true };
             }
           } else {
@@ -219,11 +223,12 @@ export async function exportToExcel(
 
       subRow.getCell(8).value = `${deptSubtotal.ps} Yes`;
       subRow.getCell(9).value = `${deptSubtotal.pns} Yes`;
-      subRow.getCell(10).value = `${deptSubtotal.ds} Yes`;
-      subRow.getCell(11).value = `${deptSubtotal.dnys} Yes`;
-      subRow.getCell(12).value = '-';
+      subRow.getCell(10).value = '-';
+      subRow.getCell(11).value = `${deptSubtotal.ds} Yes`;
+      subRow.getCell(12).value = `${deptSubtotal.dnys} Yes`;
+      subRow.getCell(13).value = '-';
 
-      for (let c = 1; c <= 12; c++) {
+      for (let c = 1; c <= 13; c++) {
         const cell = subRow.getCell(c);
         cell.fill = {
           type: 'pattern',
@@ -232,7 +237,7 @@ export async function exportToExcel(
         };
         cell.border = borderStyle;
         cell.font = { name: 'Arial', size: 10, bold: true };
-        if ([8, 9, 10, 11].includes(c)) {
+        if ([8, 9, 10, 11, 12].includes(c)) {
           cell.alignment = { horizontal: 'center', vertical: 'middle' };
         }
       }
@@ -250,9 +255,10 @@ export async function exportToExcel(
     worksheet.getColumn(7).width = 22;
     worksheet.getColumn(8).width = 14;
     worksheet.getColumn(9).width = 16;
-    worksheet.getColumn(10).width = 14;
-    worksheet.getColumn(11).width = 18;
-    worksheet.getColumn(12).width = 25;
+    worksheet.getColumn(10).width = 22;
+    worksheet.getColumn(11).width = 14;
+    worksheet.getColumn(12).width = 18;
+    worksheet.getColumn(13).width = 25;
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
@@ -292,7 +298,7 @@ function exportToExcelHtmlFallback(
 
     rowsHtml += `
       <tr style="background-color: ${bgHex}; font-weight: bold;">
-        <td colspan="12" style="padding: 8px; border: 1px solid #999;">DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)</td>
+        <td colspan="13" style="padding: 8px; border: 1px solid #999;">DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)</td>
       </tr>
     `;
 
@@ -308,6 +314,7 @@ function exportToExcelHtmlFallback(
           <td style="border: 1px solid #ccc;">${r.eligible_batch}</td>
           <td style="text-align: center; border: 1px solid #ccc; font-weight: bold;">${formatYesNo(r.progress_submitted)}</td>
           <td style="text-align: center; border: 1px solid #ccc; font-weight: bold;">${formatYesNo(r.progress_not_submitted)}</td>
+          <td style="text-align: center; border: 1px solid #ccc; font-weight: bold;">${r.relevant_submission_month || '-'}</td>
           <td style="text-align: center; border: 1px solid #ccc; font-weight: bold;">${formatYesNo(r.delay_submitted)}</td>
           <td style="text-align: center; border: 1px solid #ccc; font-weight: bold;">${formatYesNo(r.delay_not_yet_submitted)}</td>
           <td style="border: 1px solid #ccc;">${r.remarks || '-'}</td>
@@ -340,23 +347,21 @@ function exportToExcelHtmlFallback(
       <table border="1" style="border-collapse: collapse; font-family: Arial; font-size: 11px;">
         <thead>
           <tr style="background-color: #0a2540; color: #ffffff; text-align: center; font-weight: bold;">
-            <th rowspan="3">#</th>
-            <th rowspan="3">Faculty</th>
-            <th rowspan="3">Department</th>
-            <th rowspan="3">Program</th>
-            <th rowspan="3">Coordinator</th>
-            <th rowspan="3">Semester/s</th>
-            <th rowspan="3">Eligible Batch for this month as per Academic Calendar</th>
+            <th rowspan="2">#</th>
+            <th rowspan="2">Faculty</th>
+            <th rowspan="2">Department</th>
+            <th rowspan="2">Program</th>
+            <th rowspan="2">Coordinator</th>
+            <th rowspan="2">Semester/s</th>
+            <th rowspan="2">Eligible Batch for this month as per Academic Calendar</th>
             <th colspan="2">Progress</th>
             <th colspan="3">Delays for submission</th>
-          </tr>
-          <tr style="background-color: #1a4066; color: #ffffff; text-align: center; font-weight: bold;">
-            <th rowspan="2">Submitted</th>
-            <th rowspan="2">Not submitted</th>
-            <th colspan="2">Relevant month to be submitted as per academic calendar</th>
             <th rowspan="2">Remarks</th>
           </tr>
           <tr style="background-color: #1a4066; color: #ffffff; text-align: center; font-weight: bold;">
+            <th>Submitted</th>
+            <th>Not submitted</th>
+            <th>Relevant month to be submitted as per academic calendar</th>
             <th>Submitted</th>
             <th>Not yet submitted</th>
           </tr>
