@@ -9,7 +9,7 @@ import { RecordFormModal } from '../components/RecordFormModal';
 import { MonthlyReportView } from '../components/MonthlyReportView';
 import { ExportCenter } from '../components/ExportCenter';
 import { SqlSetupModal } from '../components/SqlSetupModal';
-import { ResultsSubmissionRecord, FilterState } from '../lib/types';
+import { ResultsSubmissionRecord, FilterState, ReportingPeriodState } from '../lib/types';
 import {
   fetchAllRecords,
   addRecord,
@@ -24,8 +24,15 @@ export default function Home() {
   const [isFallback, setIsFallback] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('dashboard');
 
-  const [selectedMonth, setSelectedMonth] = useState<string>('September');
-  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [reportingPeriod, setReportingPeriod] = useState<ReportingPeriodState>({
+    mode: 'single',
+    selectedMonth: 'September',
+    selectedYear: 2026,
+    fromMonth: 'January',
+    fromYear: 2026,
+    toMonth: 'September',
+    toYear: 2026,
+  });
 
   // Modals & UI state
   const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false);
@@ -73,14 +80,14 @@ export default function Home() {
     loadData();
   }, [loadData]);
 
-  // Keep filter state month & year synced when sidebar changed
+  // Keep filter state month & year synced when reporting period changed
   useEffect(() => {
     setFilterState((prev) => ({
       ...prev,
-      report_month: selectedMonth,
-      report_year: selectedYear,
+      report_month: reportingPeriod.selectedMonth,
+      report_year: reportingPeriod.selectedYear,
     }));
-  }, [selectedMonth, selectedYear]);
+  }, [reportingPeriod]);
 
   // Handle Record Save (Create or Update)
   const handleSaveRecord = async (recordData: Partial<ResultsSubmissionRecord>) => {
@@ -135,8 +142,7 @@ export default function Home() {
         activeTab={activeTab}
         onOpenAddModal={handleOpenAdd}
         onOpenSqlModal={() => setIsSqlModalOpen(true)}
-        selectedMonth={selectedMonth}
-        selectedYear={selectedYear}
+        reportingPeriod={reportingPeriod}
         isFallback={isFallback}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
@@ -147,10 +153,8 @@ export default function Home() {
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          selectedMonth={selectedMonth}
-          setSelectedMonth={setSelectedMonth}
-          selectedYear={selectedYear}
-          setSelectedYear={setSelectedYear}
+          reportingPeriod={reportingPeriod}
+          setReportingPeriod={setReportingPeriod}
           totalRecordsCount={records.length}
           mobileMenuOpen={mobileMenuOpen}
           setMobileMenuOpen={setMobileMenuOpen}
@@ -196,8 +200,7 @@ export default function Home() {
               {activeTab === 'dashboard' && (
                 <Dashboard
                   records={records}
-                  selectedMonth={selectedMonth}
-                  selectedYear={selectedYear}
+                  reportingPeriod={reportingPeriod}
                   onNavigateTab={(tab) => setActiveTab(tab)}
                   onOpenAddModal={handleOpenAdd}
                 />
@@ -217,16 +220,16 @@ export default function Home() {
               {activeTab === 'report' && (
                 <MonthlyReportView
                   records={records}
-                  selectedMonth={selectedMonth}
-                  selectedYear={selectedYear}
+                  reportingPeriod={reportingPeriod}
+                  setReportingPeriod={setReportingPeriod}
                 />
               )}
 
               {activeTab === 'export' && (
                 <ExportCenter
                   records={records}
-                  selectedMonth={selectedMonth}
-                  selectedYear={selectedYear}
+                  reportingPeriod={reportingPeriod}
+                  setReportingPeriod={setReportingPeriod}
                   onNavigateReport={() => setActiveTab('report')}
                 />
               )}
@@ -241,8 +244,8 @@ export default function Home() {
         onClose={() => setIsFormModalOpen(false)}
         onSave={handleSaveRecord}
         initialRecord={editingRecord}
-        currentMonth={selectedMonth}
-        currentYear={selectedYear}
+        currentMonth={reportingPeriod.selectedMonth}
+        currentYear={Number(reportingPeriod.selectedYear)}
       />
 
       {/* Supabase SQL Setup Modal */}
@@ -254,3 +257,4 @@ export default function Home() {
     </div>
   );
 }
+

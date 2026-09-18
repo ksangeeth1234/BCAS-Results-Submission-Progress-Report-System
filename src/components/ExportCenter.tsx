@@ -2,41 +2,46 @@
 
 import React from 'react';
 import { Download, FileSpreadsheet, FileText, Printer, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
-import { ResultsSubmissionRecord } from '../lib/types';
+import { ResultsSubmissionRecord, ReportingPeriodState, isRecordInDateRange, getPeriodLabel } from '../lib/types';
 import { exportToExcel } from '../lib/exportExcel';
 import { exportToPdf } from '../lib/exportPdf';
 import { OFFICIAL_DEPARTMENTS } from '../lib/departments';
+import { DateRangeSelector } from './DateRangeSelector';
 
 interface ExportCenterProps {
   records: ResultsSubmissionRecord[];
-  selectedMonth: string;
-  selectedYear: number | string;
+  reportingPeriod: ReportingPeriodState;
+  setReportingPeriod: (period: ReportingPeriodState) => void;
   onNavigateReport: () => void;
 }
 
 export const ExportCenter: React.FC<ExportCenterProps> = ({
   records,
-  selectedMonth,
-  selectedYear,
+  reportingPeriod,
+  setReportingPeriod,
   onNavigateReport,
 }) => {
-  const filteredRecords = records.filter(
-    (r) =>
-      (!selectedMonth || r.report_month === selectedMonth) &&
-      (!selectedYear || String(r.report_year) === String(selectedYear))
-  );
+  const filteredRecords = records.filter((r) => isRecordInDateRange(r, reportingPeriod));
+  const periodLabel = getPeriodLabel(reportingPeriod);
 
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <h1 className="text-2xl font-extrabold text-slate-900 flex items-center space-x-2">
-          <Download className="w-6 h-6 text-blue-600" />
-          <span>Report Export Center</span>
-        </h1>
-        <p className="text-xs text-slate-500 mt-1">
-          Export the official BCAS Board of Examiners monthly progress report into high-fidelity Excel spreadsheets or print-ready PDF documents.
-        </p>
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-extrabold text-slate-900 flex items-center space-x-2">
+            <Download className="w-6 h-6 text-blue-600" />
+            <span>Report Export Center</span>
+          </h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Export the official BCAS Board of Examiners progress report into high-fidelity Excel spreadsheets or print-ready PDF documents.
+          </p>
+        </div>
+
+        {/* Quick Date Range Control Bar */}
+        <div className="w-full lg:w-auto">
+          <DateRangeSelector period={reportingPeriod} onChange={setReportingPeriod} compact={true} />
+        </div>
       </div>
 
       {/* Export Options Grid */}
@@ -71,7 +76,7 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
           </div>
 
           <button
-            onClick={() => exportToExcel(filteredRecords, selectedMonth, selectedYear)}
+            onClick={() => exportToExcel(filteredRecords, periodLabel)}
             className="w-full flex items-center justify-center space-x-2 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs py-3 rounded-xl shadow-md shadow-emerald-700/20 transition-all"
           >
             <Download className="w-4 h-4" />
@@ -109,7 +114,7 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
           </div>
 
           <button
-            onClick={() => exportToPdf(filteredRecords, selectedMonth, selectedYear)}
+            onClick={() => exportToPdf(filteredRecords, periodLabel)}
             className="w-full flex items-center justify-center space-x-2 bg-rose-700 hover:bg-rose-600 text-white font-semibold text-xs py-3 rounded-xl shadow-md shadow-rose-700/20 transition-all"
           >
             <Download className="w-4 h-4" />
@@ -164,10 +169,11 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
         </h3>
         <p className="text-xs text-slate-600">
           The exported report will include <span className="font-bold text-blue-600">{filteredRecords.length} records</span> for{' '}
-          <span className="font-bold text-slate-900">{selectedMonth} {selectedYear}</span> across{' '}
+          <span className="font-bold text-slate-900">{periodLabel}</span> across{' '}
           <span className="font-bold text-slate-900">{OFFICIAL_DEPARTMENTS.length} official departments</span>.
         </p>
       </div>
     </div>
   );
 };
+

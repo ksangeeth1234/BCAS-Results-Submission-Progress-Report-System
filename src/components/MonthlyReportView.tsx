@@ -2,31 +2,29 @@
 
 import React, { useState } from 'react';
 import { Printer, FileSpreadsheet, FileText, Building2, Sparkles, Lock } from 'lucide-react';
-import { ResultsSubmissionRecord, formatYesNo, isYes } from '../lib/types';
+import { ResultsSubmissionRecord, ReportingPeriodState, isRecordInDateRange, getPeriodLabel, isYes } from '../lib/types';
 import { DEPARTMENT_COLOR_MAP, DEFAULT_DEPARTMENT_COLOR } from '../lib/departments';
 import { exportToExcel } from '../lib/exportExcel';
 import { exportToPdf } from '../lib/exportPdf';
 import { PasswordPromptModal } from './PasswordPromptModal';
+import { DateRangeSelector } from './DateRangeSelector';
 
 interface MonthlyReportViewProps {
   records: ResultsSubmissionRecord[];
-  selectedMonth: string;
-  selectedYear: number | string;
+  reportingPeriod: ReportingPeriodState;
+  setReportingPeriod: (period: ReportingPeriodState) => void;
 }
 
 export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   records,
-  selectedMonth,
-  selectedYear,
+  reportingPeriod,
+  setReportingPeriod,
 }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<'print' | 'excel' | 'pdf' | null>(null);
 
-  const filteredRecords = records.filter(
-    (r) =>
-      (!selectedMonth || r.report_month === selectedMonth) &&
-      (!selectedYear || String(r.report_year) === String(selectedYear))
-  );
+  const filteredRecords = records.filter((r) => isRecordInDateRange(r, reportingPeriod));
+  const periodLabel = getPeriodLabel(reportingPeriod);
 
   const groupedByDept: Record<string, ResultsSubmissionRecord[]> = {};
   filteredRecords.forEach((r) => {
@@ -41,11 +39,11 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   };
 
   const handleInitiateExcel = () => {
-    exportToExcel(filteredRecords, selectedMonth, selectedYear);
+    exportToExcel(filteredRecords, periodLabel);
   };
 
   const handleInitiatePdf = () => {
-    exportToPdf(filteredRecords, selectedMonth, selectedYear);
+    exportToPdf(filteredRecords, periodLabel);
   };
 
   const handleConfirmAuthorization = () => {
@@ -58,16 +56,21 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Toolbar */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 print:hidden">
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 print:hidden">
         <div>
           <div className="flex items-center space-x-2 text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">
             <Sparkles className="w-4 h-4" />
-            <span>Excel Template Faithful View</span>
+            <span>Official Report Generator</span>
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900">Monthly Progress Report</h1>
+          <h1 className="text-2xl font-extrabold text-slate-900">Progression & Delay Report</h1>
           <p className="text-xs text-slate-500">
-            Official BCAS Board of Examiners progression report layout with department pastel colors.
+            Official Board of Examiners progress report formatted for print and export.
           </p>
+        </div>
+
+        {/* Quick Date Range Bar */}
+        <div className="w-full lg:w-auto">
+          <DateRangeSelector period={reportingPeriod} onChange={setReportingPeriod} compact={true} />
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
@@ -111,7 +114,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
             Progression of Results submission to the Board of Examiners Monthly wise
           </h2>
           <div className="inline-block bg-slate-100 text-slate-800 text-xs font-bold px-4 py-1 rounded-full border border-slate-300">
-            Reporting Month: {selectedMonth} {selectedYear}
+            Reporting Period: {periodLabel}
           </div>
         </div>
 
@@ -150,7 +153,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
               {Object.keys(groupedByDept).length === 0 ? (
                 <tr>
                   <td colSpan={14} className="p-8 text-center text-slate-500 font-medium">
-                    No results submission records found for {selectedMonth} {selectedYear}.
+                    No results submission records found for {periodLabel}.
                   </td>
                 </tr>
               ) : (

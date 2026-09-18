@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Building2, PlusCircle, Database, Calendar, Menu, X, FileSpreadsheet, ShieldAlert } from 'lucide-react';
+import { Building2, PlusCircle, Calendar, Menu, X } from 'lucide-react';
+import { ReportingPeriodState, getPeriodLabel } from '../lib/types';
 
 interface HeaderProps {
   activeTab: string;
   onOpenAddModal: () => void;
   onOpenSqlModal: () => void;
-  selectedMonth: string;
-  selectedYear: number | string;
+  reportingPeriod: ReportingPeriodState;
   isFallback: boolean;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
@@ -18,8 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onOpenAddModal,
   onOpenSqlModal,
-  selectedMonth,
-  selectedYear,
+  reportingPeriod,
   isFallback,
   mobileMenuOpen,
   setMobileMenuOpen,
@@ -59,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Active Period Display */}
             <div className="flex items-center space-x-1.5 text-xs font-semibold bg-slate-800 text-blue-200 border border-slate-700 px-3 py-1.5 rounded-lg shadow-inner">
               <Calendar className="w-3.5 h-3.5 text-blue-400" />
-              <span>{selectedMonth} {selectedYear}</span>
+              <span>{getPeriodLabel(reportingPeriod)}</span>
             </div>
 
             {/* Add Record Primary Action */}
@@ -76,3 +75,4 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+

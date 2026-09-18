@@ -3,9 +3,11 @@ import { DEPARTMENT_COLOR_MAP, DEFAULT_DEPARTMENT_COLOR } from './departments';
 
 export async function exportToExcel(
   records: ResultsSubmissionRecord[],
-  month: string,
-  year: number | string
+  monthOrPeriodLabel: string,
+  year?: number | string
 ) {
+  const periodLabel = year !== undefined && year !== '' ? `${monthOrPeriodLabel} ${year}` : monthOrPeriodLabel;
+
   try {
     // Dynamic import to prevent SSR & Node stream module conflicts
     const ExcelModule = await import('exceljs');
@@ -15,7 +17,8 @@ export async function exportToExcel(
     workbook.creator = 'BCAS Campus Reporting System';
     workbook.created = new Date();
 
-    const sheetName = `${month.substring(0, 3)} ${year} Progress Report`;
+    const cleanName = periodLabel.replace(/[^a-zA-Z0-9 ]/g, '').substring(0, 25);
+    const sheetName = `${cleanName} Progress Report`;
     const worksheet = workbook.addWorksheet(sheetName, {
       views: [{ showGridLines: true }],
     });
@@ -45,7 +48,7 @@ export async function exportToExcel(
 
     worksheet.mergeCells('A3:N3');
     const dateCell = worksheet.getCell('A3');
-    dateCell.value = `Reporting Period: ${month} ${year}`;
+    dateCell.value = `Reporting Period: ${periodLabel}`;
     dateCell.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF333333' } };
     dateCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(3).height = 20;
@@ -267,23 +270,23 @@ export async function exportToExcel(
     const blob = new Blob([buffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
+    const cleanFilenameLabel = periodLabel.replace(/[^a-zA-Z0-9]/g, '_');
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `BCAS_Results_Submission_Report_${month}_${year}.xlsx`;
+    link.download = `BCAS_Results_Submission_Report_${cleanFilenameLabel}.xlsx`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   } catch (error: any) {
     console.warn('ExcelJS export warning, triggering HTML Spreadsheet download fallback:', error);
-    exportToExcelHtmlFallback(records, month, year);
+    exportToExcelHtmlFallback(records, periodLabel);
   }
 }
 
 // Fallback HTML Spreadsheet Exporter (Guaranteed compatibility in all browsers)
 function exportToExcelHtmlFallback(
   records: ResultsSubmissionRecord[],
-  month: string,
-  year: number | string
+  periodLabel: string
 ) {
   const grouped: Record<string, ResultsSubmissionRecord[]> = {};
   records.forEach((rec) => {
@@ -347,7 +350,7 @@ function exportToExcelHtmlFallback(
     <body>
       <h2 style="text-align: center;">BCAS Campus</h2>
       <h3 style="text-align: center;">Progression of Results submission to the Board of Examiners Monthly wise</h3>
-      <p style="text-align: center; font-weight: bold;">Reporting Period: ${month} ${year}</p>
+      <p style="text-align: center; font-weight: bold;">Reporting Period: ${periodLabel}</p>
       <table border="1" style="border-collapse: collapse; font-family: Arial; font-size: 11px;">
         <thead>
           <tr style="background-color: #0a2540; color: #ffffff; text-align: center; font-weight: bold;">
@@ -383,9 +386,10 @@ function exportToExcelHtmlFallback(
     type: 'application/vnd.ms-excel;charset=utf-8',
   });
 
+  const cleanFilenameLabel = periodLabel.replace(/[^a-zA-Z0-9]/g, '_');
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `BCAS_Results_Submission_Report_${month}_${year}.xls`;
+  link.download = `BCAS_Results_Submission_Report_${cleanFilenameLabel}.xls`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

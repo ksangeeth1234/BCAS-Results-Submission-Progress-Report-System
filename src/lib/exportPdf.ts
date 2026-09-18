@@ -5,9 +5,11 @@ import { DEPARTMENT_COLOR_MAP, DEFAULT_DEPARTMENT_COLOR } from './departments';
 
 export function exportToPdf(
   records: ResultsSubmissionRecord[],
-  month: string,
-  year: number | string
+  monthOrPeriodLabel: string,
+  year?: number | string
 ) {
+  const periodLabel = year !== undefined && year !== '' ? `${monthOrPeriodLabel} ${year}` : monthOrPeriodLabel;
+
   const doc = new jsPDF({
     orientation: 'landscape',
     unit: 'mm',
@@ -34,7 +36,7 @@ export function exportToPdf(
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(60, 60, 60);
-  doc.text(`Reporting Period: ${month} ${year}`, pageWidth / 2, 25, { align: 'center' });
+  doc.text(`Reporting Period: ${periodLabel}`, pageWidth / 2, 25, { align: 'center' });
 
   const head = [
     [
@@ -190,5 +192,6 @@ export function exportToPdf(
     },
   });
 
-  doc.save(`BCAS_Results_Submission_Report_${month}_${year}.pdf`);
+  const cleanFilenameLabel = periodLabel.replace(/[^a-zA-Z0-9]/g, '_');
+  doc.save(`BCAS_Results_Submission_Report_${cleanFilenameLabel}.pdf`);
 }

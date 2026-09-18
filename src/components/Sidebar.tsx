@@ -12,15 +12,14 @@ import {
   ChevronRight,
   ShieldCheck,
 } from 'lucide-react';
-import { MONTHS, YEARS } from '../lib/departments';
+import { DateRangeSelector } from './DateRangeSelector';
+import { ReportingPeriodState } from '../lib/types';
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  selectedMonth: string;
-  setSelectedMonth: (month: string) => void;
-  selectedYear: number;
-  setSelectedYear: (year: number) => void;
+  reportingPeriod: ReportingPeriodState;
+  setReportingPeriod: (period: ReportingPeriodState) => void;
   totalRecordsCount: number;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
@@ -30,10 +29,8 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   setActiveTab,
-  selectedMonth,
-  setSelectedMonth,
-  selectedYear,
-  setSelectedYear,
+  reportingPeriod,
+  setReportingPeriod,
   totalRecordsCount,
   mobileMenuOpen,
   setMobileMenuOpen,
@@ -68,50 +65,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }`}
       >
         <div className="p-4 space-y-6 overflow-y-auto">
-          {/* Reporting Period Quick Selector */}
-          <div className="bg-slate-800/80 rounded-xl p-3.5 border border-slate-700/60 shadow-sm space-y-2.5">
-            <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
-              <span className="flex items-center space-x-1.5 text-blue-400">
-                <Calendar className="w-4 h-4" />
-                <span>REPORT PERIOD</span>
-              </span>
-              <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">
-                Active Filter
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="text-[11px] text-slate-400 font-medium block mb-1">Month</label>
-                <select
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="w-full bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                >
-                  {MONTHS.map((m) => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[11px] text-slate-400 font-medium block mb-1">Year</label>
-                <select
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                >
-                  {YEARS.map((y) => (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
+          {/* Reporting Period Quick Selector Component */}
+          <DateRangeSelector period={reportingPeriod} onChange={setReportingPeriod} />
 
           {/* Navigation Menu */}
           <nav className="space-y-1">

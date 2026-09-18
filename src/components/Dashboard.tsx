@@ -13,25 +13,25 @@ import {
   ArrowUpRight,
   PlusCircle,
 } from 'lucide-react';
-import { ResultsSubmissionRecord, DashboardStats, isYes } from '../lib/types';
+import { ResultsSubmissionRecord, DashboardStats, ReportingPeriodState, isRecordInDateRange, getPeriodLabel, isYes } from '../lib/types';
 import { OFFICIAL_DEPARTMENTS } from '../lib/departments';
 
 interface DashboardProps {
   records: ResultsSubmissionRecord[];
-  selectedMonth: string;
-  selectedYear: number | string;
+  reportingPeriod: ReportingPeriodState;
   onNavigateTab: (tab: string) => void;
   onOpenAddModal: () => void;
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({
   records,
-  selectedMonth,
-  selectedYear,
+  reportingPeriod,
   onNavigateTab,
   onOpenAddModal,
 }) => {
-  const stats: DashboardStats = records.reduce(
+  const filteredRecords = records.filter((r) => isRecordInDateRange(r, reportingPeriod));
+
+  const stats: DashboardStats = filteredRecords.reduce(
     (acc, r) => ({
       totalRecords: acc.totalRecords + 1,
       totalBatches: acc.totalBatches + (r.eligible_batch ? 1 : 0),
@@ -51,7 +51,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   );
 
   const deptCounts = OFFICIAL_DEPARTMENTS.map((dept) => {
-    const deptRecords = records.filter((r) => r.department === dept.name);
+    const deptRecords = filteredRecords.filter((r) => r.department === dept.name);
     const submitted = deptRecords.reduce((s, r) => s + (isYes(r.progress_submitted) ? 1 : 0), 0);
     const notSubmitted = deptRecords.reduce((s, r) => s + (isYes(r.progress_not_submitted) ? 1 : 0), 0);
     return {
@@ -70,7 +70,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           <div>
             <div className="flex items-center space-x-2 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-1">
               <Calendar className="w-4 h-4" />
-              <span>Report Month: {selectedMonth} {selectedYear}</span>
+              <span>Report Period: {getPeriodLabel(reportingPeriod)}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               Board of Examiners Progress Dashboard
