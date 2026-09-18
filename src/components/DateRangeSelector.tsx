@@ -62,6 +62,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
               onChange={(e) => onChange({ ...period, selectedMonth: e.target.value })}
               className="bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
+              <option value="All">All Months</option>
               {MONTHS.map((m) => (
                 <option key={m} value={m}>
                   {m}
@@ -70,9 +71,10 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
             </select>
             <select
               value={period.selectedYear}
-              onChange={(e) => onChange({ ...period, selectedYear: Number(e.target.value) })}
+              onChange={(e) => onChange({ ...period, selectedYear: e.target.value === 'All' ? 'All' : Number(e.target.value) })}
               className="bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
+              <option value="All">All Years</option>
               {YEARS.map((y) => (
                 <option key={y} value={y}>
                   {y}
@@ -192,6 +194,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
               onChange={(e) => onChange({ ...period, selectedMonth: e.target.value })}
               className="w-full bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
+              <option value="All">All Months</option>
               {MONTHS.map((m) => (
                 <option key={m} value={m}>
                   {m}
@@ -204,9 +207,10 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
             <label className="text-[11px] text-slate-400 font-medium block mb-1">Year</label>
             <select
               value={period.selectedYear}
-              onChange={(e) => onChange({ ...period, selectedYear: Number(e.target.value) })}
+              onChange={(e) => onChange({ ...period, selectedYear: e.target.value === 'All' ? 'All' : Number(e.target.value) })}
               className="w-full bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
+              <option value="All">All Years</option>
               {YEARS.map((y) => (
                 <option key={y} value={y}>
                   {y}
