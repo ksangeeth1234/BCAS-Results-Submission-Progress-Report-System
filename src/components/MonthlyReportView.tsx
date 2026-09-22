@@ -127,6 +127,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[55px]">Branch</th>
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[130px]">Faculty</th>
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[130px]">Department</th>
+                <th rowSpan={2} className="border border-slate-500 p-2 min-w-[110px]">Intake</th>
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[150px]">Program</th>
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[140px]">Module</th>
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[120px]">Coordinator</th>
@@ -153,7 +154,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
             <tbody>
               {Object.keys(groupedByDept).length === 0 ? (
                 <tr>
-                  <td colSpan={15} className="p-8 text-center text-slate-500 font-medium">
+                  <td colSpan={16} className="p-8 text-center text-slate-500 font-medium">
                     No results submission records found for {periodLabel}.
                   </td>
                 </tr>
@@ -174,7 +175,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                   return (
                     <React.Fragment key={deptName}>
                       <tr className={`${deptConfig.bgColor} font-bold text-slate-900 border-t-2 border-b border-slate-400`}>
-                        <td colSpan={15} className="p-2.5 border border-slate-400 bg-white/40">
+                        <td colSpan={16} className="p-2.5 border border-slate-400 bg-white/40">
                           <div className="flex items-center space-x-2">
                             <span className={`w-3 h-3 rounded-full border ${deptConfig.badgeColor}`} />
                             <span className="text-xs uppercase tracking-wide">
@@ -212,6 +213,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                             </td>
                             <td className="p-2 border border-slate-300">{r.faculty}</td>
                             <td className="p-2 border border-slate-300 font-medium">{r.department}</td>
+                            <td className="p-2 border border-slate-300">{r.intake || '-'}</td>
                             <td className="p-2 border border-slate-300 font-semibold text-slate-900">{r.program}</td>
                             <td className="p-2 border border-slate-300 font-medium text-slate-800">{r.module || '-'}</td>
                             <td className="p-2 border border-slate-300">{r.coordinator}</td>
@@ -244,7 +246,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                       })}
 
                       <tr className="bg-slate-200 font-bold text-slate-900 border-b-2 border-slate-400">
-                        <td colSpan={9} className="p-2 border border-slate-400 text-right pr-4 text-xs">
+                        <td colSpan={10} className="p-2 border border-slate-400 text-right pr-4 text-xs">
                           Total Yes for {deptName}:
                         </td>
                         <td className="p-2 border border-slate-400 text-center text-emerald-900 font-black">

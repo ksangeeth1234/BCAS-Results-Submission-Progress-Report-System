@@ -41,21 +41,21 @@ export async function exportToExcel(
     };
 
     // Header Titles
-    worksheet.mergeCells('A1:O1');
+    worksheet.mergeCells('A1:P1');
     const titleCell = worksheet.getCell('A1');
     titleCell.value = 'BCAS Campus';
     titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FF0A2540' } };
     titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(1).height = 30;
 
-    worksheet.mergeCells('A2:O2');
+    worksheet.mergeCells('A2:P2');
     const subTitleCell = worksheet.getCell('A2');
     subTitleCell.value = 'Progression of Results submission to the Board of Examiners Monthly wise';
     subTitleCell.font = { name: 'Arial', size: 12, bold: true, italic: true, color: { argb: 'FF1A4066' } };
     subTitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
     worksheet.getRow(2).height = 24;
 
-    worksheet.mergeCells('A3:O3');
+    worksheet.mergeCells('A3:P3');
     const dateCell = worksheet.getCell('A3');
     dateCell.value = `Reporting Period: ${periodLabel}`;
     dateCell.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF333333' } };
@@ -71,11 +71,12 @@ export async function exportToExcel(
       { col: 'B', name: 'Branch Code' },
       { col: 'C', name: 'Faculty' },
       { col: 'D', name: 'Department' },
-      { col: 'E', name: 'Program' },
-      { col: 'F', name: 'Module' },
-      { col: 'G', name: 'Coordinator' },
-      { col: 'H', name: 'Semester/s' },
-      { col: 'I', name: 'Eligible Batch for this month as per the Academic Calendar' },
+      { col: 'E', name: 'Intake' },
+      { col: 'F', name: 'Program' },
+      { col: 'G', name: 'Module' },
+      { col: 'H', name: 'Coordinator' },
+      { col: 'I', name: 'Semester/s' },
+      { col: 'J', name: 'Eligible Batch for this month as per the Academic Calendar' },
     ];
 
     mainHeaders.forEach(({ col, name }) => {
@@ -84,33 +85,33 @@ export async function exportToExcel(
       cell.value = name;
     });
 
-    // Grouped Header: Progress (J5:K5)
-    worksheet.mergeCells('J5:K5');
-    const progressHeader = worksheet.getCell('J5');
+    // Grouped Header: Progress (K5:L5)
+    worksheet.mergeCells('K5:L5');
+    const progressHeader = worksheet.getCell('K5');
     progressHeader.value = 'Progress';
 
-    worksheet.mergeCells('J6:J7');
-    worksheet.getCell('J6').value = 'Submitted';
     worksheet.mergeCells('K6:K7');
-    worksheet.getCell('K6').value = 'Not submitted';
+    worksheet.getCell('K6').value = 'Submitted';
+    worksheet.mergeCells('L6:L7');
+    worksheet.getCell('L6').value = 'Not submitted';
 
-    // Grouped Header: Delays for submission (L5:N5)
-    worksheet.mergeCells('L5:N5');
-    const delayHeader = worksheet.getCell('L5');
+    // Grouped Header: Delays for submission (M5:O5)
+    worksheet.mergeCells('M5:O5');
+    const delayHeader = worksheet.getCell('M5');
     delayHeader.value = 'Delays for submission';
 
     // Row 6 under Delays: Relevant month, Submitted, Not yet submitted
-    worksheet.mergeCells('L6:L7');
-    worksheet.getCell('L6').value = 'Relevant month to be submitted as per the academic calendar';
-
     worksheet.mergeCells('M6:M7');
-    worksheet.getCell('M6').value = 'Submitted';
+    worksheet.getCell('M6').value = 'Relevant month to be submitted as per the academic calendar';
 
     worksheet.mergeCells('N6:N7');
-    worksheet.getCell('N6').value = 'Not yet submitted';
+    worksheet.getCell('N6').value = 'Submitted';
 
-    worksheet.mergeCells('O5:O7');
-    worksheet.getCell('O5').value = 'Remarks';
+    worksheet.mergeCells('O6:O7');
+    worksheet.getCell('O6').value = 'Not yet submitted';
+
+    worksheet.mergeCells('P5:P7');
+    worksheet.getCell('P5').value = 'Remarks';
 
     // Header Fill
     const headerFill: any = {
@@ -128,7 +129,7 @@ export async function exportToExcel(
 
     for (let r = 5; r <= 7; r++) {
       worksheet.getRow(r).height = 24;
-      for (let c = 1; c <= 15; c++) {
+      for (let c = 1; c <= 16; c++) {
         const cell = worksheet.getRow(r).getCell(c);
         cell.fill = headerFill;
         cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFF' } };
@@ -159,7 +160,7 @@ export async function exportToExcel(
       const bgArgb = 'FF' + config.excelHex;
 
       // Department Header Banner
-      worksheet.mergeCells(`A${currentRow}:O${currentRow}`);
+      worksheet.mergeCells(`A${currentRow}:P${currentRow}`);
       const deptBanner = worksheet.getCell(`A${currentRow}`);
       deptBanner.value = `DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)`;
       deptBanner.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF0A2540' } };
@@ -182,19 +183,20 @@ export async function exportToExcel(
         row.getCell(2).value = rec.branch_code || '-';
         row.getCell(3).value = rec.faculty;
         row.getCell(4).value = rec.department;
-        row.getCell(5).value = rec.program;
-        row.getCell(6).value = rec.module || '-';
-        row.getCell(7).value = rec.coordinator;
-        row.getCell(8).value = rec.semester;
-        row.getCell(9).value = rec.eligible_batch;
-        row.getCell(10).value = formatYesNo(rec.progress_submitted);
-        row.getCell(11).value = formatYesNo(rec.progress_not_submitted);
-        row.getCell(12).value = rec.relevant_submission_month || '-';
-        row.getCell(13).value = formatYesNo(rec.delay_submitted);
-        row.getCell(14).value = formatYesNo(rec.delay_not_yet_submitted);
-        row.getCell(15).value = rec.remarks || '-';
+        row.getCell(5).value = rec.intake || '-';
+        row.getCell(6).value = rec.program;
+        row.getCell(7).value = rec.module || '-';
+        row.getCell(8).value = rec.coordinator;
+        row.getCell(9).value = rec.semester;
+        row.getCell(10).value = rec.eligible_batch;
+        row.getCell(11).value = formatYesNo(rec.progress_submitted);
+        row.getCell(12).value = formatYesNo(rec.progress_not_submitted);
+        row.getCell(13).value = rec.relevant_submission_month || '-';
+        row.getCell(14).value = formatYesNo(rec.delay_submitted);
+        row.getCell(15).value = formatYesNo(rec.delay_not_yet_submitted);
+        row.getCell(16).value = rec.remarks || '-';
 
-        for (let c = 1; c <= 15; c++) {
+        for (let c = 1; c <= 16; c++) {
           const cell = row.getCell(c);
           cell.fill = {
             type: 'pattern',
@@ -204,9 +206,9 @@ export async function exportToExcel(
           cell.border = borderStyle;
           cell.font = { name: 'Arial', size: 9.5 };
 
-          if ([1, 2, 10, 11, 12, 13, 14].includes(c)) {
+          if ([1, 2, 11, 12, 13, 14, 15].includes(c)) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
-            if ([10, 11, 13, 14].includes(c) && cell.value === 'Yes') {
+            if ([11, 12, 14, 15].includes(c) && cell.value === 'Yes') {
               cell.font = { name: 'Arial', size: 9.5, bold: true };
             }
           } else {
@@ -231,20 +233,20 @@ export async function exportToExcel(
       const subRow = worksheet.getRow(currentRow);
       subRow.height = 22;
 
-      worksheet.mergeCells(`A${currentRow}:I${currentRow}`);
+      worksheet.mergeCells(`A${currentRow}:J${currentRow}`);
       const subLabel = worksheet.getCell(`A${currentRow}`);
       subLabel.value = `Total Yes for ${deptName}:`;
       subLabel.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF0A2540' } };
       subLabel.alignment = { horizontal: 'right', vertical: 'middle' };
 
-      subRow.getCell(10).value = `${deptSubtotal.ps} Yes`;
-      subRow.getCell(11).value = `${deptSubtotal.pns} Yes`;
-      subRow.getCell(12).value = '-';
-      subRow.getCell(13).value = `${deptSubtotal.ds} Yes`;
-      subRow.getCell(14).value = `${deptSubtotal.dnys} Yes`;
-      subRow.getCell(15).value = '-';
+      subRow.getCell(11).value = `${deptSubtotal.ps} Yes`;
+      subRow.getCell(12).value = `${deptSubtotal.pns} Yes`;
+      subRow.getCell(13).value = '-';
+      subRow.getCell(14).value = `${deptSubtotal.ds} Yes`;
+      subRow.getCell(15).value = `${deptSubtotal.dnys} Yes`;
+      subRow.getCell(16).value = '-';
 
-      for (let c = 1; c <= 15; c++) {
+      for (let c = 1; c <= 16; c++) {
         const cell = subRow.getCell(c);
         cell.fill = {
           type: 'pattern',
@@ -253,7 +255,7 @@ export async function exportToExcel(
         };
         cell.border = borderStyle;
         cell.font = { name: 'Arial', size: 10, bold: true };
-        if ([10, 11, 12, 13, 14].includes(c)) {
+        if ([11, 12, 13, 14, 15].includes(c)) {
           cell.alignment = { horizontal: 'center', vertical: 'middle' };
         }
       }
@@ -266,17 +268,18 @@ export async function exportToExcel(
     worksheet.getColumn(2).width = 10;  // Branch Code
     worksheet.getColumn(3).width = 24;  // Faculty
     worksheet.getColumn(4).width = 22;  // Department
-    worksheet.getColumn(5).width = 26;  // Program
-    worksheet.getColumn(6).width = 24;  // Module
-    worksheet.getColumn(7).width = 20;  // Coordinator
-    worksheet.getColumn(8).width = 16;  // Semester
-    worksheet.getColumn(9).width = 22;  // Eligible Batch
-    worksheet.getColumn(10).width = 14; // Submitted
-    worksheet.getColumn(11).width = 16; // Not submitted
-    worksheet.getColumn(12).width = 22; // Relevant month
-    worksheet.getColumn(13).width = 14; // Delay Sub
-    worksheet.getColumn(14).width = 18; // Delay Not Sub
-    worksheet.getColumn(15).width = 25; // Remarks
+    worksheet.getColumn(5).width = 18;  // Intake
+    worksheet.getColumn(6).width = 26;  // Program
+    worksheet.getColumn(7).width = 24;  // Module
+    worksheet.getColumn(8).width = 20;  // Coordinator
+    worksheet.getColumn(9).width = 16;  // Semester
+    worksheet.getColumn(10).width = 22; // Eligible Batch
+    worksheet.getColumn(11).width = 14; // Submitted
+    worksheet.getColumn(12).width = 16; // Not submitted
+    worksheet.getColumn(13).width = 22; // Relevant month
+    worksheet.getColumn(14).width = 14; // Delay Sub
+    worksheet.getColumn(15).width = 18; // Delay Not Sub
+    worksheet.getColumn(16).width = 25; // Remarks
 
     // ─── Department Color Legend ───────────────────────────────────────────
     currentRow += 1; // blank separator row
@@ -284,7 +287,7 @@ export async function exportToExcel(
     currentRow++;
 
     // Legend title
-    worksheet.mergeCells(`A${currentRow}:O${currentRow}`);
+    worksheet.mergeCells(`A${currentRow}:P${currentRow}`);
     const legendTitle = worksheet.getCell(`A${currentRow}`);
     legendTitle.value = 'DEPARTMENT COLOR LEGEND';
     legendTitle.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FFFFFFFF' } };
@@ -311,7 +314,7 @@ export async function exportToExcel(
     for (let i = 0; i < legendEntries.length; i += 2) {
       worksheet.getRow(currentRow).height = 20;
 
-      // Left entry (cols A-G)
+      // Left entry (cols A-H)
       const [leftDept] = legendEntries[i];
       const leftConfig = DEPARTMENT_COLOR_MAP[leftDept] || DEFAULT_DEPARTMENT_COLOR;
       const leftArgb = 'FF' + leftConfig.excelHex;
@@ -324,13 +327,13 @@ export async function exportToExcel(
       leftCell.alignment = { horizontal: 'left', vertical: 'middle' };
       leftCell.border = legendBorderStyle;
 
-      // Right entry (cols I-O) – if it exists
+      // Right entry (cols I-P) – if it exists
       if (i + 1 < legendEntries.length) {
         const [rightDept] = legendEntries[i + 1];
         const rightConfig = DEPARTMENT_COLOR_MAP[rightDept] || DEFAULT_DEPARTMENT_COLOR;
         const rightArgb = 'FF' + rightConfig.excelHex;
 
-        worksheet.mergeCells(`I${currentRow}:O${currentRow}`);
+        worksheet.mergeCells(`I${currentRow}:P${currentRow}`);
         const rightCell = worksheet.getCell(`I${currentRow}`);
         rightCell.value = `  ■  ${rightDept}`;
         rightCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: rightArgb } };
@@ -380,7 +383,7 @@ function exportToExcelHtmlFallback(
 
     rowsHtml += `
       <tr style="background-color: ${bgHex}; font-weight: bold;">
-        <td colspan="14" style="padding: 8px; border: 1px solid #999;">DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)</td>
+        <td colspan="15" style="padding: 8px; border: 1px solid #999;">DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)</td>
       </tr>
     `;
 
@@ -388,8 +391,10 @@ function exportToExcelHtmlFallback(
       rowsHtml += `
         <tr style="background-color: ${bgHex};">
           <td style="text-align: center; border: 1px solid #ccc;">${globalIndex++}</td>
+          <td style="text-align: center; border: 1px solid #ccc;">${r.branch_code || '-'}</td>
           <td style="border: 1px solid #ccc;">${r.faculty}</td>
           <td style="border: 1px solid #ccc;">${r.department}</td>
+          <td style="border: 1px solid #ccc;">${r.intake || '-'}</td>
           <td style="border: 1px solid #ccc; font-weight: bold;">${r.program}</td>
           <td style="border: 1px solid #ccc;">${r.module || '-'}</td>
           <td style="border: 1px solid #ccc;">${r.coordinator}</td>
@@ -431,8 +436,10 @@ function exportToExcelHtmlFallback(
         <thead>
           <tr style="background-color: #0a2540; color: #ffffff; text-align: center; font-weight: bold;">
             <th rowspan="2">#</th>
+            <th rowspan="2">Branch</th>
             <th rowspan="2">Faculty</th>
             <th rowspan="2">Department</th>
+            <th rowspan="2">Intake</th>
             <th rowspan="2">Program</th>
             <th rowspan="2">Module</th>
             <th rowspan="2">Coordinator</th>

@@ -12,6 +12,7 @@ import {
   SAMPLE_COORDINATORS,
   SEMESTERS,
   BRANCH_CODES,
+  SAMPLE_INTAKES,
 } from '../lib/departments';
 
 interface RecordFormModalProps {
@@ -37,6 +38,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
     branch_code: BRANCH_CODES[0].code,
     faculty: FACULTIES[0] || '',
     department: OFFICIAL_DEPARTMENTS[0].name,
+    intake: '',
     program: SAMPLE_PROGRAMS[OFFICIAL_DEPARTMENTS[0].name]?.[0] || '',
     module: '',
     coordinator: SAMPLE_COORDINATORS[0],
@@ -57,6 +59,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
     if (initialRecord) {
       setFormData({
         ...initialRecord,
+        intake: initialRecord.intake || '',
         module: initialRecord.module || '',
         progress_submitted: isYes(initialRecord.progress_submitted),
         progress_not_submitted: isYes(initialRecord.progress_not_submitted),
@@ -70,6 +73,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
         branch_code: BRANCH_CODES[0].code,
         faculty: FACULTIES[0] || '',
         department: OFFICIAL_DEPARTMENTS[0].name,
+        intake: '',
         program: SAMPLE_PROGRAMS[OFFICIAL_DEPARTMENTS[0].name]?.[0] || '',
         module: '',
         coordinator: SAMPLE_COORDINATORS[0],
@@ -243,7 +247,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Faculty <span className="text-rose-500">*</span>
@@ -255,6 +259,25 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="e.g. Faculty of Computer Science"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Intake
+                </label>
+                <input
+                  type="text"
+                  list="intakes-list"
+                  value={formData.intake || ''}
+                  onChange={(e) => setFormData({ ...formData, intake: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="e.g. 2024 October / Spring Intake"
+                />
+                <datalist id="intakes-list">
+                  {SAMPLE_INTAKES.map((i) => (
+                    <option key={i} value={i} />
+                  ))}
+                </datalist>
               </div>
 
               <div>

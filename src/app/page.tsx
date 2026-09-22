@@ -49,6 +49,7 @@ export default function Home() {
     report_year: 2026,
     faculty: '',
     department: '',
+    intake: '',
     program: '',
     coordinator: '',
     semester: '',

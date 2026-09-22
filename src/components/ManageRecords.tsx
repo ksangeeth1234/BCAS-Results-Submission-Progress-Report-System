@@ -67,6 +67,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
     if (filterState.search_query.trim()) {
       const q = filterState.search_query.toLowerCase();
       const match =
+        (r.intake && r.intake.toLowerCase().includes(q)) ||
         r.program.toLowerCase().includes(q) ||
         (r.module && r.module.toLowerCase().includes(q)) ||
         r.coordinator.toLowerCase().includes(q) ||
@@ -91,6 +92,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
       report_year: '',
       faculty: '',
       department: '',
+      intake: '',
       program: '',
       coordinator: '',
       semester: '',
@@ -271,6 +273,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 <th className="p-3.5 text-center">#</th>
                 <th className="p-3.5 text-center">Branch</th>
                 <th className="p-3.5">Department</th>
+                <th className="p-3.5">Intake</th>
                 <th className="p-3.5">Program</th>
                 <th className="p-3.5">Module</th>
                 <th className="p-3.5">Coordinator</th>
@@ -293,7 +296,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
             <tbody className="divide-y divide-slate-100">
               {paginatedRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={14} className="p-8 text-center text-slate-400">
+                  <td colSpan={15} className="p-8 text-center text-slate-400">
                     No matching records found. Try adjusting your filters or search terms.
                   </td>
                 </tr>
@@ -328,6 +331,9 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                         >
                           {r.department}
                         </span>
+                      </td>
+                      <td className="p-3 text-slate-700 font-medium max-w-[130px] truncate" title={r.intake || '-'}>
+                        {r.intake || '-'}
                       </td>
                       <td className="p-3 font-semibold text-slate-900 max-w-[200px] truncate" title={r.program}>
                         {r.program}

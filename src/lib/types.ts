@@ -5,6 +5,7 @@ export interface ResultsSubmissionRecord {
   branch_code?: string; // AC - Kalmunei | CC - Colombo | KC - Kandy | JAC - Jaffna
   faculty: string;
   department: string;
+  intake?: string;
   program: string;
   module: string;
   coordinator: string;
@@ -25,6 +26,7 @@ export interface FilterState {
   report_year: number | string;
   faculty: string;
   department: string;
+  intake: string;
   program: string;
   coordinator: string;
   semester: string;

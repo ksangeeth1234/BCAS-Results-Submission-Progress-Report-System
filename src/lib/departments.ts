@@ -237,3 +237,22 @@ export const BRANCH_CODES: { code: string; label: string }[] = [
   { code: 'KC', label: 'KC - Kandy' },
   { code: 'JAC', label: 'JAC - Jaffna' },
 ];
+
+export const SAMPLE_INTAKES = [
+  'January Intake',
+  'February Intake',
+  'March Intake',
+  'April Intake',
+  'May Intake',
+  'June Intake',
+  'July Intake',
+  'August Intake',
+  'September Intake',
+  'October Intake',
+  'November Intake',
+  'December Intake',
+  'Spring Intake',
+  'Fall Intake',
+  'Summer Intake',
+];
+

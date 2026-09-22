@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
     report_year INTEGER NOT NULL,
     faculty VARCHAR(150),
     department VARCHAR(150) NOT NULL,
+    intake VARCHAR(100),
     program VARCHAR(200) NOT NULL,
     module VARCHAR(200),
     coordinator VARCHAR(150) NOT NULL,
@@ -39,7 +40,8 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Ensure module and relevant_submission_month columns exist if table already existed
+-- Ensure module, intake, and relevant_submission_month columns exist if table already existed
+ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS intake VARCHAR(100);
 ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS module VARCHAR(200);
 ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS relevant_submission_month VARCHAR(100);
 
