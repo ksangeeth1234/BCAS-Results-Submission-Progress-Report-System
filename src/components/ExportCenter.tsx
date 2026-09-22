@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
-import { Download, FileSpreadsheet, FileText, Printer, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Download, FileSpreadsheet, FileText, Printer, CheckCircle2, ShieldCheck, Sparkles, Mail } from 'lucide-react';
 import { ResultsSubmissionRecord, ReportingPeriodState, isRecordInDateRange, getPeriodLabel } from '../lib/types';
 import { exportToExcel } from '../lib/exportExcel';
 import { exportToPdf } from '../lib/exportPdf';
 import { OFFICIAL_DEPARTMENTS } from '../lib/departments';
 import { DateRangeSelector } from './DateRangeSelector';
+import { EmailSummaryModal } from './EmailSummaryModal';
 
 interface ExportCenterProps {
   records: ResultsSubmissionRecord[];
@@ -21,6 +22,8 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
   setReportingPeriod,
   onNavigateReport,
 }) => {
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
   const filteredRecords = records.filter((r) => isRecordInDateRange(r, reportingPeriod));
   const periodLabel = getPeriodLabel(reportingPeriod);
 
@@ -34,7 +37,7 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
             <span>Report Export Center</span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Export the official BCAS Board of Examiners progress report into high-fidelity Excel spreadsheets or print-ready PDF documents.
+            Export the official BCAS Board of Examiners progress report into Excel, PDF, printable views, or generate email summaries for Sir.
           </p>
         </div>
 
@@ -45,7 +48,45 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
       </div>
 
       {/* Export Options Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Email Summary Card */}
+        <div className="bg-white rounded-2xl p-6 border border-indigo-200 shadow-sm hover:shadow-md transition-all space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+              <Mail className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">Email Draft Generator</h2>
+              <p className="text-xs text-slate-500 mt-1">
+                Generates a ready-to-copy email message showing updated vs pending departments to send to Sir.
+              </p>
+            </div>
+
+            <ul className="text-xs space-y-2 text-slate-600">
+              <li className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                <span>Lists departments updated & pending</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                <span>One-click copy to clipboard</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-indigo-600" />
+                <span>Formatted for email clients</span>
+              </li>
+            </ul>
+          </div>
+
+          <button
+            onClick={() => setIsEmailModalOpen(true)}
+            className="w-full flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs py-3 rounded-xl shadow-md shadow-indigo-600/20 transition-all"
+          >
+            <Mail className="w-4 h-4" />
+            <span>Generate Email Text</span>
+          </button>
+        </div>
+
         {/* Excel Card */}
         <div className="bg-white rounded-2xl p-6 border border-emerald-200 shadow-sm hover:shadow-md transition-all space-y-4 flex flex-col justify-between">
           <div className="space-y-3">
@@ -173,7 +214,15 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
           <span className="font-bold text-slate-900">{OFFICIAL_DEPARTMENTS.length} official departments</span>.
         </p>
       </div>
+
+      <EmailSummaryModal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        records={records}
+        reportingPeriod={reportingPeriod}
+      />
     </div>
   );
 };
+
 

@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Printer, FileSpreadsheet, FileText, Building2, Sparkles, Lock } from 'lucide-react';
+import { Printer, FileSpreadsheet, FileText, Building2, Sparkles, Lock, Mail } from 'lucide-react';
 import { ResultsSubmissionRecord, ReportingPeriodState, isRecordInDateRange, getPeriodLabel, isYes } from '../lib/types';
 import { DEPARTMENT_COLOR_MAP, DEFAULT_DEPARTMENT_COLOR } from '../lib/departments';
 import { exportToExcel } from '../lib/exportExcel';
 import { exportToPdf } from '../lib/exportPdf';
 import { PasswordPromptModal } from './PasswordPromptModal';
 import { DateRangeSelector } from './DateRangeSelector';
+import { EmailSummaryModal } from './EmailSummaryModal';
 
 interface MonthlyReportViewProps {
   records: ResultsSubmissionRecord[];
@@ -21,6 +22,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   setReportingPeriod,
 }) => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<'print' | 'excel' | 'pdf' | null>(null);
 
   const filteredRecords = records.filter((r) => isRecordInDateRange(r, reportingPeriod));
@@ -64,7 +66,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900">Progression & Delay Report</h1>
           <p className="text-xs text-slate-500">
-            Official Board of Examiners progress report formatted for print and export.
+            Official Board of Examiners progress report formatted for print, export, and email draft summary.
           </p>
         </div>
 
@@ -74,6 +76,14 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={() => setIsEmailModalOpen(true)}
+            className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md shadow-indigo-600/20 transition-all"
+            title="Generate Email Text for Sir"
+          >
+            <Mail className="w-4 h-4" />
+            <span>Generate Email Text</span>
+          </button>
           <button
             onClick={handleInitiateExcel}
             className="flex items-center space-x-2 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md shadow-emerald-700/20 transition-all"
@@ -304,6 +314,13 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
         title="Admin Password Authorization Required"
         description="Please enter the admin password to authorize printing the official BCAS report."
         actionLabel="Authorize & Print"
+      />
+
+      <EmailSummaryModal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        records={records}
+        reportingPeriod={reportingPeriod}
       />
     </div>
   );
