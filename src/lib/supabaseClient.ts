@@ -44,6 +44,7 @@ export async function addRecord(record: Omit<ResultsSubmissionRecord, 'id' | 'cr
   try {
     const payload = {
       ...record,
+      branch_code: record.branch_code || '',
       module: record.module || '',
       relevant_submission_month: record.relevant_submission_month || '',
       progress_submitted: Boolean(record.progress_submitted),

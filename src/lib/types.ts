@@ -2,6 +2,7 @@ export interface ResultsSubmissionRecord {
   id?: number;
   report_month: string;
   report_year: number;
+  branch_code?: string; // AC - Kalmunei | CC - Colombo | KC - Kandy | JAC - Jaffna
   faculty: string;
   department: string;
   program: string;

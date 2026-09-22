@@ -11,6 +11,7 @@ import {
   SAMPLE_PROGRAMS,
   SAMPLE_COORDINATORS,
   SEMESTERS,
+  BRANCH_CODES,
 } from '../lib/departments';
 
 interface RecordFormModalProps {
@@ -33,6 +34,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
   const [formData, setFormData] = useState<Partial<ResultsSubmissionRecord>>({
     report_month: currentMonth,
     report_year: currentYear,
+    branch_code: BRANCH_CODES[0].code,
     faculty: FACULTIES[0] || '',
     department: OFFICIAL_DEPARTMENTS[0].name,
     program: SAMPLE_PROGRAMS[OFFICIAL_DEPARTMENTS[0].name]?.[0] || '',
@@ -65,6 +67,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
       setFormData({
         report_month: currentMonth,
         report_year: currentYear,
+        branch_code: BRANCH_CODES[0].code,
         faculty: FACULTIES[0] || '',
         department: OFFICIAL_DEPARTMENTS[0].name,
         program: SAMPLE_PROGRAMS[OFFICIAL_DEPARTMENTS[0].name]?.[0] || '',
@@ -170,7 +173,7 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
               <span>Reporting Period & Department</span>
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Report Month <span className="text-rose-500">*</span>
@@ -200,6 +203,23 @@ export const RecordFormModal: React.FC<RecordFormModalProps> = ({
                   {YEARS.map((y) => (
                     <option key={y} value={y} className="text-black">
                       {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Branch Code <span className="text-rose-500">*</span>
+                </label>
+                <select
+                  value={formData.branch_code || ''}
+                  onChange={(e) => setFormData({ ...formData, branch_code: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-3 font-bold text-black focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                  {BRANCH_CODES.map((b) => (
+                    <option key={b.code} value={b.code} className="text-black font-semibold">
+                      {b.label}
                     </option>
                   ))}
                 </select>

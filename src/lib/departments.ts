@@ -230,3 +230,10 @@ export const SEMESTERS = [
   'Year 3',
   'Final Semester',
 ];
+
+export const BRANCH_CODES: { code: string; label: string }[] = [
+  { code: 'AC', label: 'AC - Kalmunei' },
+  { code: 'CC', label: 'CC - Colombo' },
+  { code: 'KC', label: 'KC - Kandy' },
+  { code: 'JAC', label: 'JAC - Jaffna' },
+];

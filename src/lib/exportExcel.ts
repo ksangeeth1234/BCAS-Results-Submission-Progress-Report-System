@@ -20,7 +20,16 @@ export async function exportToExcel(
     const cleanName = periodLabel.replace(/[^a-zA-Z0-9 ]/g, '').substring(0, 25);
     const sheetName = `${cleanName} Progress Report`;
     const worksheet = workbook.addWorksheet(sheetName, {
-      views: [{ showGridLines: true }],
+      views: [
+        {
+          showGridLines: true,
+          state: 'frozen',
+          xSplit: 0,
+          ySplit: 7, // Freeze the first 7 rows (title + header rows)
+          topLeftCell: 'A8',
+          activeCell: 'A8',
+        },
+      ],
     });
 
     // Page Setup
@@ -265,6 +274,70 @@ export async function exportToExcel(
     worksheet.getColumn(12).width = 14;
     worksheet.getColumn(13).width = 18;
     worksheet.getColumn(14).width = 25;
+
+    // ─── Department Color Legend ───────────────────────────────────────────
+    currentRow += 1; // blank separator row
+    worksheet.getRow(currentRow).height = 10;
+    currentRow++;
+
+    // Legend title
+    worksheet.mergeCells(`A${currentRow}:N${currentRow}`);
+    const legendTitle = worksheet.getCell(`A${currentRow}`);
+    legendTitle.value = 'DEPARTMENT COLOR LEGEND';
+    legendTitle.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FFFFFFFF' } };
+    legendTitle.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0A2540' } };
+    legendTitle.alignment = { horizontal: 'center', vertical: 'middle' };
+    legendTitle.border = {
+      top: { style: 'thin', color: { argb: 'FFFFFFFF' } },
+      left: { style: 'thin', color: { argb: 'FFFFFFFF' } },
+      bottom: { style: 'thin', color: { argb: 'FFFFFFFF' } },
+      right: { style: 'thin', color: { argb: 'FFFFFFFF' } },
+    };
+    worksheet.getRow(currentRow).height = 22;
+    currentRow++;
+
+    // Two-column layout for legend entries
+    const legendEntries = Object.entries(grouped);
+    const legendBorderStyle: any = {
+      top: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+      left: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+      bottom: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+      right: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+    };
+
+    for (let i = 0; i < legendEntries.length; i += 2) {
+      worksheet.getRow(currentRow).height = 20;
+
+      // Left entry (cols A-G)
+      const [leftDept] = legendEntries[i];
+      const leftConfig = DEPARTMENT_COLOR_MAP[leftDept] || DEFAULT_DEPARTMENT_COLOR;
+      const leftArgb = 'FF' + leftConfig.excelHex;
+
+      worksheet.mergeCells(`A${currentRow}:G${currentRow}`);
+      const leftCell = worksheet.getCell(`A${currentRow}`);
+      leftCell.value = `  ■  ${leftDept}`;
+      leftCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: leftArgb } };
+      leftCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF0A2540' } };
+      leftCell.alignment = { horizontal: 'left', vertical: 'middle' };
+      leftCell.border = legendBorderStyle;
+
+      // Right entry (cols H-N) – if it exists
+      if (i + 1 < legendEntries.length) {
+        const [rightDept] = legendEntries[i + 1];
+        const rightConfig = DEPARTMENT_COLOR_MAP[rightDept] || DEFAULT_DEPARTMENT_COLOR;
+        const rightArgb = 'FF' + rightConfig.excelHex;
+
+        worksheet.mergeCells(`H${currentRow}:N${currentRow}`);
+        const rightCell = worksheet.getCell(`H${currentRow}`);
+        rightCell.value = `  ■  ${rightDept}`;
+        rightCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: rightArgb } };
+        rightCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF0A2540' } };
+        rightCell.alignment = { horizontal: 'left', vertical: 'middle' };
+        rightCell.border = legendBorderStyle;
+      }
+
+      currentRow++;
+    }
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
