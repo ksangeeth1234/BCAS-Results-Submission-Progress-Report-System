@@ -269,6 +269,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
             <thead>
               <tr className="bg-slate-900 text-white font-semibold border-b border-slate-800">
                 <th className="p-3.5 text-center">#</th>
+                <th className="p-3.5 text-center">Branch</th>
                 <th className="p-3.5">Department</th>
                 <th className="p-3.5">Program</th>
                 <th className="p-3.5">Module</th>
@@ -292,7 +293,7 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
             <tbody className="divide-y divide-slate-100">
               {paginatedRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="p-8 text-center text-slate-400">
+                  <td colSpan={14} className="p-8 text-center text-slate-400">
                     No matching records found. Try adjusting your filters or search terms.
                   </td>
                 </tr>
@@ -312,6 +313,15 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                       className={`hover:bg-slate-50 transition-colors ${deptConfig.bgColor}`}
                     >
                       <td className="p-3 text-center font-bold text-slate-500">{rowNum}</td>
+                      <td className="p-3 text-center">
+                        {r.branch_code ? (
+                          <span className="inline-block px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-slate-800 text-white border border-slate-600 tracking-wider">
+                            {r.branch_code}
+                          </span>
+                        ) : (
+                          <span className="text-slate-300">—</span>
+                        )}
+                      </td>
                       <td className="p-3">
                         <span
                           className={`inline-block px-2.5 py-1 rounded-lg text-[10px] font-bold border ${deptConfig.badgeColor}`}

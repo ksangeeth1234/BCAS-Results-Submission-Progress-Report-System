@@ -41,6 +41,7 @@ export function exportToPdf(
   const head = [
     [
       { content: '#', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
+      { content: 'Branch Code', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Faculty', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Department', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Program', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
@@ -77,7 +78,7 @@ export function exportToPdf(
     body.push([
       {
         content: `DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)`,
-        colSpan: 14,
+        colSpan: 15,
         styles: {
           fillColor: config.pdfRgb,
           textColor: [10, 37, 64],
@@ -93,6 +94,7 @@ export function exportToPdf(
         deptConfig: config,
         data: [
           index++,
+          r.branch_code || '-',
           r.faculty,
           r.department,
           r.program,
@@ -121,7 +123,7 @@ export function exportToPdf(
     );
 
     body.push([
-      { content: `Total Yes for ${deptName}:`, colSpan: 8, styles: { halign: 'right', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `Total Yes for ${deptName}:`, colSpan: 9, styles: { halign: 'right', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: `${subtotal.ps} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: `${subtotal.pns} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
@@ -160,19 +162,20 @@ export function exportToPdf(
     },
     columnStyles: {
       0: { cellWidth: 6, halign: 'center' },
-      1: { cellWidth: 20 },
-      2: { cellWidth: 20 },
-      3: { cellWidth: 24 },
+      1: { cellWidth: 10, halign: 'center' }, // Branch Code
+      2: { cellWidth: 18 },
+      3: { cellWidth: 18 },
       4: { cellWidth: 22 },
       5: { cellWidth: 18 },
-      6: { cellWidth: 14 },
-      7: { cellWidth: 22 },
-      8: { cellWidth: 13, halign: 'center' },
-      9: { cellWidth: 15, halign: 'center' },
-      10: { cellWidth: 22, halign: 'center' },
-      11: { cellWidth: 13, halign: 'center' },
-      12: { cellWidth: 15, halign: 'center' },
-      13: { cellWidth: 22 },
+      6: { cellWidth: 16 },
+      7: { cellWidth: 12 },
+      8: { cellWidth: 18 },
+      9: { cellWidth: 12, halign: 'center' },
+      10: { cellWidth: 14, halign: 'center' },
+      11: { cellWidth: 20, halign: 'center' },
+      12: { cellWidth: 12, halign: 'center' },
+      13: { cellWidth: 14, halign: 'center' },
+      14: { cellWidth: 18 },
     },
     margin: { top: 28, left: 10, right: 10, bottom: 15 },
     didDrawPage: (data) => {
