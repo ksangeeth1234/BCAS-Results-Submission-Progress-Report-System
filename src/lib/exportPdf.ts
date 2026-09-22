@@ -125,12 +125,12 @@ export function exportToPdf(
     );
 
     body.push([
-      { content: `Total Yes for ${deptName}:`, colSpan: 10, styles: { halign: 'right', fontStyle: 'bold', fillColor: [226, 232, 240] } },
-      { content: `${subtotal.ps} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
-      { content: `${subtotal.pns} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `Total for ${deptName}:`, colSpan: 10, styles: { halign: 'right', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `${subtotal.ps}`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `${subtotal.pns}`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
-      { content: `${subtotal.ds} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
-      { content: `${subtotal.dnys} Yes`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `${subtotal.ds}`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: `${subtotal.dnys}`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
     ]);
   });
