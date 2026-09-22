@@ -235,15 +235,15 @@ export async function exportToExcel(
 
       worksheet.mergeCells(`A${currentRow}:J${currentRow}`);
       const subLabel = worksheet.getCell(`A${currentRow}`);
-      subLabel.value = `Total Yes for ${deptName}:`;
+      subLabel.value = `Total for ${deptName}:`;
       subLabel.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FF0A2540' } };
       subLabel.alignment = { horizontal: 'right', vertical: 'middle' };
 
-      subRow.getCell(11).value = `${deptSubtotal.ps} Yes`;
-      subRow.getCell(12).value = `${deptSubtotal.pns} Yes`;
+      subRow.getCell(11).value = deptSubtotal.ps;
+      subRow.getCell(12).value = deptSubtotal.pns;
       subRow.getCell(13).value = '-';
-      subRow.getCell(14).value = `${deptSubtotal.ds} Yes`;
-      subRow.getCell(15).value = `${deptSubtotal.dnys} Yes`;
+      subRow.getCell(14).value = deptSubtotal.ds;
+      subRow.getCell(15).value = deptSubtotal.dnys;
       subRow.getCell(16).value = '-';
 
       for (let c = 1; c <= 16; c++) {

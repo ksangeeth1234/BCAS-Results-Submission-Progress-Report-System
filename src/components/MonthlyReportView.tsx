@@ -247,22 +247,22 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
 
                       <tr className="bg-slate-200 font-bold text-slate-900 border-b-2 border-slate-400">
                         <td colSpan={10} className="p-2 border border-slate-400 text-right pr-4 text-xs">
-                          Total Yes for {deptName}:
+                          Total for {deptName}:
                         </td>
                         <td className="p-2 border border-slate-400 text-center text-emerald-900 font-black">
-                          {subtotal.ps} Yes
+                          {subtotal.ps}
                         </td>
                         <td className="p-2 border border-slate-400 text-center text-rose-900 font-black">
-                          {subtotal.pns} Yes
+                          {subtotal.pns}
                         </td>
                         <td className="p-2 border border-slate-400 text-center font-bold text-slate-500">
                           -
                         </td>
                         <td className="p-2 border border-slate-400 text-center text-amber-900 font-black">
-                          {subtotal.ds} Yes
+                          {subtotal.ds}
                         </td>
                         <td className="p-2 border border-slate-400 text-center text-purple-900 font-black">
-                          {subtotal.dnys} Yes
+                          {subtotal.dnys}
                         </td>
                         <td className="p-2 border border-slate-400 text-center">-</td>
                       </tr>
