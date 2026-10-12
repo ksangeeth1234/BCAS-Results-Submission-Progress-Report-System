@@ -27,6 +27,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
 
   const filteredRecords = records.filter((r) => isRecordInDateRange(r, reportingPeriod));
   const periodLabel = getPeriodLabel(reportingPeriod);
+  const hasRecords = filteredRecords.length > 0;
 
   const groupedByDept: Record<string, ResultsSubmissionRecord[]> = {};
   filteredRecords.forEach((r) => {
@@ -41,14 +42,20 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
   };
 
   const handleInitiateExcel = () => {
+    if (!hasRecords) return;
     exportToExcel(filteredRecords, periodLabel);
   };
 
   const handleInitiatePdf = () => {
+    if (!hasRecords) return;
     exportToPdf(filteredRecords, periodLabel);
   };
 
   const handleConfirmAuthorization = () => {
+    if (!hasRecords) {
+      setPendingAction(null);
+      return;
+    }
     if (pendingAction === 'print') {
       window.print();
     }
@@ -78,30 +85,50 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setIsEmailModalOpen(true)}
-            className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md shadow-indigo-600/20 transition-all"
-            title="Generate Email Text for Sir"
+            disabled={!hasRecords}
+            className={`flex items-center space-x-2 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md transition-all ${
+              hasRecords
+                ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/20'
+                : 'bg-slate-200 text-slate-400 shadow-none cursor-not-allowed'
+            }`}
+            title={hasRecords ? 'Generate Email Text for Sir' : 'No records available to draft an email'}
           >
             <Mail className="w-4 h-4" />
             <span>Generate Email Text</span>
           </button>
           <button
             onClick={handleInitiateExcel}
-            className="flex items-center space-x-2 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md shadow-emerald-700/20 transition-all"
+            disabled={!hasRecords}
+            className={`flex items-center space-x-2 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md transition-all ${
+              hasRecords
+                ? 'bg-emerald-700 hover:bg-emerald-600 text-white shadow-emerald-700/20'
+                : 'bg-slate-200 text-slate-400 shadow-none cursor-not-allowed'
+            }`}
           >
             <FileSpreadsheet className="w-4 h-4" />
             <span>Export Excel (.xlsx)</span>
           </button>
           <button
             onClick={handleInitiatePdf}
-            className="flex items-center space-x-2 bg-rose-700 hover:bg-rose-600 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md shadow-rose-700/20 transition-all"
+            disabled={!hasRecords}
+            className={`flex items-center space-x-2 font-semibold text-xs px-3.5 py-2.5 rounded-xl shadow-md transition-all ${
+              hasRecords
+                ? 'bg-rose-700 hover:bg-rose-600 text-white shadow-rose-700/20'
+                : 'bg-slate-200 text-slate-400 shadow-none cursor-not-allowed'
+            }`}
           >
             <FileText className="w-4 h-4" />
             <span>Export PDF (.pdf)</span>
           </button>
           <button
             onClick={handleInitiatePrint}
-            className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl transition-all border border-slate-700"
-            title="Print report (Password Protected)"
+            disabled={!hasRecords}
+            className={`flex items-center space-x-2 font-semibold text-xs px-3.5 py-2.5 rounded-xl transition-all border ${
+              hasRecords
+                ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+                : 'bg-slate-200 text-slate-400 border-slate-300 cursor-not-allowed'
+            }`}
+            title={hasRecords ? 'Print report (Password Protected)' : 'No records available to print'}
           >
             <Printer className="w-4 h-4 text-amber-400" />
             <span>Print Report</span>
@@ -162,10 +189,22 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
             </thead>
 
             <tbody>
-              {Object.keys(groupedByDept).length === 0 ? (
+              {!hasRecords ? (
                 <tr>
-                  <td colSpan={16} className="p-8 text-center text-slate-500 font-medium">
-                    No results submission records found for {periodLabel}.
+                  <td colSpan={16} className="p-0 border-0">
+                    <div className="flex flex-col items-center justify-center gap-3 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-10 text-center text-slate-600">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-200 text-slate-500 text-xl font-bold">
+                        !
+                      </div>
+                      <div>
+                        <p className="text-base font-extrabold text-slate-700">
+                          No submission records found
+                        </p>
+                        <p className="mt-1 text-xs text-slate-500">
+                          There are no results submission entries for {periodLabel}. Try selecting another reporting period or add a new record.
+                        </p>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               ) : (
