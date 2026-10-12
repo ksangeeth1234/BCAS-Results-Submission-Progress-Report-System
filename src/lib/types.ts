@@ -11,7 +11,7 @@ export interface ResultsSubmissionRecord {
   coordinator: string;
   semester: string;
   eligible_batch: string;
-  progress_submitted: boolean | number | string; // Boolean true/false or 'Yes'/'No'
+  progress_submitted: boolean | number | string; // Boolean, numeric, or 'Yes'/'No' status value
   progress_not_submitted: boolean | number | string;
   relevant_submission_month: string;
   delay_submitted: boolean | number | string;
@@ -136,13 +136,9 @@ export function formatYesNo(val: boolean | number | string | undefined | null): 
   if (val === true || val === 1 || String(val).toLowerCase() === 'yes' || String(val).toLowerCase() === 'true') {
     return 'Yes';
   }
-  if (val === false || val === 0 || String(val).toLowerCase() === 'no' || String(val).toLowerCase() === 'false') {
-    return 'No';
-  }
-  return 'No';
+  return '-';
 }
 
 export function isYes(val: boolean | number | string | undefined | null): boolean {
   return formatYesNo(val) === 'Yes';
 }
-

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Printer, FileSpreadsheet, FileText, Building2, Sparkles, Lock, Mail } from 'lucide-react';
-import { ResultsSubmissionRecord, ReportingPeriodState, isRecordInDateRange, getPeriodLabel, isYes } from '../lib/types';
+import { ResultsSubmissionRecord, ReportingPeriodState, isRecordInDateRange, getPeriodLabel, isYes, formatYesNo } from '../lib/types';
 import { DEPARTMENT_COLOR_MAP, DEFAULT_DEPARTMENT_COLOR } from '../lib/departments';
 import { exportToExcel } from '../lib/exportExcel';
 import { exportToPdf } from '../lib/exportPdf';
@@ -270,11 +270,11 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                             <td className="p-2 border border-slate-300">{r.eligible_batch}</td>
 
                             <td className={`p-2 border border-slate-300 text-center font-bold ${psYes ? 'text-emerald-800 bg-emerald-100/60' : 'text-slate-400'}`}>
-                              {psYes ? 'Yes' : 'No'}
+                              {formatYesNo(r.progress_submitted)}
                             </td>
 
                             <td className={`p-2 border border-slate-300 text-center font-bold ${pnsYes ? 'text-rose-800 bg-rose-100/60' : 'text-slate-400'}`}>
-                              {pnsYes ? 'Yes' : 'No'}
+                              {formatYesNo(r.progress_not_submitted)}
                             </td>
 
                             <td className="p-2 border border-slate-300 text-center font-bold text-amber-950 bg-amber-50/50">
@@ -282,11 +282,11 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                             </td>
 
                             <td className={`p-2 border border-slate-300 text-center font-bold ${dsYes ? 'text-amber-800 bg-amber-100/60' : 'text-slate-400'}`}>
-                              {dsYes ? 'Yes' : 'No'}
+                              {formatYesNo(r.delay_submitted)}
                             </td>
 
                             <td className={`p-2 border border-slate-300 text-center font-bold ${dnysYes ? 'text-purple-800 bg-purple-100/60' : 'text-slate-400'}`}>
-                              {dnysYes ? 'Yes' : 'No'}
+                              {formatYesNo(r.delay_not_yet_submitted)}
                             </td>
 
                             <td className="p-2 border border-slate-300 text-xs italic">{r.remarks || '-'}</td>
