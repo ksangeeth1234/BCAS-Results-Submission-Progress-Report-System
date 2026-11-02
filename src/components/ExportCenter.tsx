@@ -103,11 +103,15 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({
             <ul className="text-xs space-y-2 text-slate-600">
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Separate tabs for each branch & consolidated sheet</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>Preserves 10 department pastel colors</span>
               </li>
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Multi-level merged header layout</span>
+                <span>Multi-level merged header layout & subtotals</span>
               </li>
               <li className="flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
