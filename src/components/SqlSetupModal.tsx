@@ -35,15 +35,19 @@ CREATE TABLE IF NOT EXISTS results_submission_progress (
     relevant_submission_month VARCHAR(100),
     delay_submitted BOOLEAN DEFAULT false,
     delay_not_yet_submitted BOOLEAN DEFAULT false,
+    given_deadline VARCHAR(100),
+    achieved_or_not BOOLEAN DEFAULT false,
     remarks TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Ensure module, intake, and relevant_submission_month columns exist if table already existed
+-- Ensure all columns exist if table already existed
 ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS intake VARCHAR(100);
 ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS module VARCHAR(200);
 ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS relevant_submission_month VARCHAR(100);
+ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS given_deadline VARCHAR(100);
+ALTER TABLE results_submission_progress ADD COLUMN IF NOT EXISTS achieved_or_not BOOLEAN DEFAULT false;
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE results_submission_progress ENABLE ROW LEVEL SECURITY;

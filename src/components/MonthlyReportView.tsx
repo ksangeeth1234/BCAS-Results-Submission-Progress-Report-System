@@ -174,6 +174,8 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                 </th>
                 <th colSpan={2} className="border border-slate-500 p-2 bg-slate-800">Progress</th>
                 <th colSpan={3} className="border border-slate-500 p-2 bg-slate-850">Delays for submission</th>
+                <th rowSpan={2} className="border border-slate-500 p-2 min-w-[110px] bg-cyan-900/60 text-cyan-200">Given Deadline</th>
+                <th rowSpan={2} className="border border-slate-500 p-2 min-w-[100px] bg-teal-900/60 text-teal-200">Achieved?</th>
                 <th rowSpan={2} className="border border-slate-500 p-2 min-w-[140px]">Remarks</th>
               </tr>
 
@@ -191,7 +193,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
             <tbody>
               {!hasRecords ? (
                 <tr>
-                  <td colSpan={16} className="p-0 border-0">
+                  <td colSpan={18} className="p-0 border-0">
                     <div className="flex flex-col items-center justify-center gap-3 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-10 text-center text-slate-600">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-200 text-slate-500 text-xl font-bold">
                         !
@@ -224,7 +226,7 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                   return (
                     <React.Fragment key={deptName}>
                       <tr className={`${deptConfig.bgColor} font-bold text-slate-900 border-t-2 border-b border-slate-400`}>
-                        <td colSpan={16} className="p-2.5 border border-slate-400 bg-white/40">
+                        <td colSpan={18} className="p-2.5 border border-slate-400 bg-white/40">
                           <div className="flex items-center space-x-2">
                             <span className={`w-3 h-3 rounded-full border ${deptConfig.badgeColor}`} />
                             <span className="text-xs uppercase tracking-wide">
@@ -289,6 +291,21 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                               {formatYesNo(r.delay_not_yet_submitted)}
                             </td>
 
+                            <td className="p-2 border border-slate-300 text-center font-semibold text-cyan-900 bg-cyan-50/40">
+                              {r.given_deadline || '-'}
+                            </td>
+
+                            {(() => {
+                              const achYes = isYes(r.achieved_or_not);
+                              return (
+                                <td className={`p-2 border border-slate-300 text-center font-bold ${achYes ? 'text-teal-800 bg-teal-100/60' : 'text-rose-700 bg-rose-50/60'}`}>
+                                  {r.achieved_or_not !== undefined && r.achieved_or_not !== null && r.achieved_or_not !== ''
+                                    ? (achYes ? 'Yes ✓' : 'No ✗')
+                                    : '-'}
+                                </td>
+                              );
+                            })()}
+
                             <td className="p-2 border border-slate-300 text-xs italic">{r.remarks || '-'}</td>
                           </tr>
                         );
@@ -313,6 +330,8 @@ export const MonthlyReportView: React.FC<MonthlyReportViewProps> = ({
                         <td className="p-2 border border-slate-400 text-center text-purple-900 font-black">
                           {subtotal.dnys}
                         </td>
+                        <td className="p-2 border border-slate-400 text-center text-slate-400 font-bold">-</td>
+                        <td className="p-2 border border-slate-400 text-center text-slate-400 font-bold">-</td>
                         <td className="p-2 border border-slate-400 text-center">-</td>
                       </tr>
                     </React.Fragment>

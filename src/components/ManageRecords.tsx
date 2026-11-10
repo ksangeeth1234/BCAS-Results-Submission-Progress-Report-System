@@ -290,13 +290,19 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 <th className="p-3.5 text-center bg-purple-950/60 text-purple-300">
                   Delay Not Sub.
                 </th>
+                <th className="p-3.5 text-center bg-cyan-950/60 text-cyan-200">
+                  Given Deadline
+                </th>
+                <th className="p-3.5 text-center bg-teal-950/60 text-teal-300">
+                  Achieved?
+                </th>
                 <th className="p-3.5 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {paginatedRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={15} className="p-8 text-center text-slate-400">
+                  <td colSpan={17} className="p-8 text-center text-slate-400">
                     No matching records found. Try adjusting your filters or search terms.
                   </td>
                 </tr>
@@ -363,6 +369,16 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
 
                       <td className={`p-3 text-center font-bold ${dnysYes ? 'text-purple-700 bg-purple-100/50' : 'text-slate-400'}`}>
                         {dnysYes ? 'Yes' : 'No'}
+                      </td>
+
+                      <td className="p-3 text-center font-bold text-cyan-950 bg-cyan-50/60">
+                        {r.given_deadline || '-'}
+                      </td>
+
+                      <td className={`p-3 text-center font-bold ${isYes(r.achieved_or_not) ? 'text-teal-700 bg-teal-100/50' : 'text-slate-400'}`}>
+                        {r.achieved_or_not !== undefined && r.achieved_or_not !== null && r.achieved_or_not !== ''
+                          ? (isYes(r.achieved_or_not) ? 'Yes ✓' : 'No ✗')
+                          : '-'}
                       </td>
 
                       <td className="p-3 text-center">

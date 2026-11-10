@@ -52,6 +52,8 @@ export function exportToPdf(
       { content: 'Eligible Batch for this month as per Academic Calendar', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Progress', colSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Delays for submission', colSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+      { content: 'Given Deadline', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
+      { content: 'Achieved?', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
       { content: 'Remarks', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } },
     ],
     [
@@ -79,7 +81,7 @@ export function exportToPdf(
     body.push([
       {
         content: `DEPARTMENT: ${deptName.toUpperCase()} (${deptRecords.length} Programs)`,
-        colSpan: 16,
+        colSpan: 18,
         styles: {
           fillColor: config.pdfRgb,
           textColor: [10, 37, 64],
@@ -109,6 +111,10 @@ export function exportToPdf(
           r.relevant_submission_month || '-',
           formatYesNo(r.delay_submitted),
           formatYesNo(r.delay_not_yet_submitted),
+          r.given_deadline || '-',
+          r.achieved_or_not !== undefined && r.achieved_or_not !== null && r.achieved_or_not !== ''
+            ? (isYes(r.achieved_or_not) ? 'Yes ✓' : 'No ✗')
+            : '-',
           r.remarks || '-',
         ],
       });
@@ -131,6 +137,8 @@ export function exportToPdf(
       { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: `${subtotal.ds}`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: `${subtotal.dnys}`, styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
+      { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
       { content: '-', styles: { halign: 'center', fontStyle: 'bold', fillColor: [226, 232, 240] } },
     ]);
   });
@@ -165,20 +173,22 @@ export function exportToPdf(
     columnStyles: {
       0: { cellWidth: 5, halign: 'center' },
       1: { cellWidth: 9, halign: 'center' }, // Branch Code
-      2: { cellWidth: 16 },
-      3: { cellWidth: 16 },
-      4: { cellWidth: 14 },
-      5: { cellWidth: 20 },
-      6: { cellWidth: 16 },
-      7: { cellWidth: 15 },
-      8: { cellWidth: 12 },
-      9: { cellWidth: 16 },
-      10: { cellWidth: 11, halign: 'center' },
-      11: { cellWidth: 13, halign: 'center' },
-      12: { cellWidth: 18, halign: 'center' },
-      13: { cellWidth: 11, halign: 'center' },
-      14: { cellWidth: 13, halign: 'center' },
-      15: { cellWidth: 16 },
+      2: { cellWidth: 14 },
+      3: { cellWidth: 14 },
+      4: { cellWidth: 12 },
+      5: { cellWidth: 18 },
+      6: { cellWidth: 14 },
+      7: { cellWidth: 13 },
+      8: { cellWidth: 10 },
+      9: { cellWidth: 14 },
+      10: { cellWidth: 10, halign: 'center' },
+      11: { cellWidth: 11, halign: 'center' },
+      12: { cellWidth: 15, halign: 'center' },
+      13: { cellWidth: 10, halign: 'center' },
+      14: { cellWidth: 11, halign: 'center' },
+      15: { cellWidth: 13, halign: 'center' }, // Given Deadline
+      16: { cellWidth: 10, halign: 'center' }, // Achieved?
+      17: { cellWidth: 14 },                   // Remarks
     },
     margin: { top: 28, left: 10, right: 10, bottom: 15 },
     didDrawPage: (data) => {

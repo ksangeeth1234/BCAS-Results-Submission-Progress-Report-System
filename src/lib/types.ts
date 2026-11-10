@@ -16,6 +16,8 @@ export interface ResultsSubmissionRecord {
   relevant_submission_month: string;
   delay_submitted: boolean | number | string;
   delay_not_yet_submitted: boolean | number | string;
+  given_deadline?: string;
+  achieved_or_not?: boolean | number | string;
   remarks: string;
   created_at?: string;
   updated_at?: string;
