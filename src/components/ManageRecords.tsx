@@ -173,11 +173,11 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 setFilterState({ ...filterState, report_month: e.target.value });
                 setCurrentPage(1);
               }}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-2 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-white border border-slate-300 rounded-xl text-xs py-2 px-2 text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="" className="text-black">All Months</option>
+              <option value="" className="bg-white text-slate-900">All Months</option>
               {MONTHS.map((m) => (
-                <option key={m} value={m} className="text-black">
+                <option key={m} value={m} className="bg-white text-slate-900">
                   {m}
                 </option>
               ))}
@@ -192,11 +192,11 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 setFilterState({ ...filterState, report_year: e.target.value });
                 setCurrentPage(1);
               }}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-2 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-white border border-slate-300 rounded-xl text-xs py-2 px-2 text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="" className="text-black">All Years</option>
+              <option value="" className="bg-white text-slate-900">All Years</option>
               {YEARS.map((y) => (
-                <option key={y} value={y} className="text-black">
+                <option key={y} value={y} className="bg-white text-slate-900">
                   {y}
                 </option>
               ))}
@@ -213,11 +213,11 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 setFilterState({ ...filterState, department: e.target.value });
                 setCurrentPage(1);
               }}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-2 font-extrabold text-black focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-white border border-slate-300 rounded-xl text-xs py-2 px-2 font-bold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="" className="text-black">All Departments</option>
+              <option value="" className="bg-white text-slate-900">All Departments</option>
               {OFFICIAL_DEPARTMENTS.map((d) => (
-                <option key={d.name} value={d.name} className="text-black font-semibold">
+                <option key={d.name} value={d.name} className="bg-white text-slate-900 font-medium">
                   {d.name}
                 </option>
               ))}
@@ -232,11 +232,11 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 setFilterState({ ...filterState, faculty: e.target.value });
                 setCurrentPage(1);
               }}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-2 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-white border border-slate-300 rounded-xl text-xs py-2 px-2 text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="" className="text-black">All Faculties</option>
+              <option value="" className="bg-white text-slate-900">All Faculties</option>
               {FACULTIES.map((f) => (
-                <option key={f} value={f} className="text-black">
+                <option key={f} value={f} className="bg-white text-slate-900">
                   {f}
                 </option>
               ))}
@@ -251,11 +251,11 @@ export const ManageRecords: React.FC<ManageRecordsProps> = ({
                 setFilterState({ ...filterState, semester: e.target.value });
                 setCurrentPage(1);
               }}
-              className="w-full bg-slate-50 border border-slate-300 rounded-xl text-xs py-2 px-2 text-black font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full bg-white border border-slate-300 rounded-xl text-xs py-2 px-2 text-slate-900 font-semibold focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="" className="text-black">All Semesters</option>
+              <option value="" className="bg-white text-slate-900">All Semesters</option>
               {SEMESTERS.map((s) => (
-                <option key={s} value={s} className="text-black">
+                <option key={s} value={s} className="bg-white text-slate-900">
                   {s}
                 </option>
               ))}

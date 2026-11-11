@@ -62,9 +62,9 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
               onChange={(e) => onChange({ ...period, selectedMonth: e.target.value })}
               className="bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="All">All Months</option>
+              <option value="All" className="bg-slate-900 text-white">All Months</option>
               {MONTHS.map((m) => (
-                <option key={m} value={m}>
+                <option key={m} value={m} className="bg-slate-900 text-white">
                   {m}
                 </option>
               ))}
@@ -74,9 +74,9 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
               onChange={(e) => onChange({ ...period, selectedYear: e.target.value === 'All' ? 'All' : Number(e.target.value) })}
               className="bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="All">All Years</option>
+              <option value="All" className="bg-slate-900 text-white">All Years</option>
               {YEARS.map((y) => (
-                <option key={y} value={y}>
+                <option key={y} value={y} className="bg-slate-900 text-white">
                   {y}
                 </option>
               ))}
@@ -93,7 +93,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-800 rounded text-xs py-0.5 px-1.5 focus:outline-none"
               >
                 {MONTHS.map((m) => (
-                  <option key={m} value={m}>
+                  <option key={m} value={m} className="bg-slate-900 text-white">
                     {m}
                   </option>
                 ))}
@@ -104,7 +104,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-800 rounded text-xs py-0.5 px-1.5 focus:outline-none"
               >
                 {YEARS.map((y) => (
-                  <option key={y} value={y}>
+                  <option key={y} value={y} className="bg-slate-900 text-white">
                     {y}
                   </option>
                 ))}
@@ -122,7 +122,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-800 rounded text-xs py-0.5 px-1.5 focus:outline-none"
               >
                 {MONTHS.map((m) => (
-                  <option key={m} value={m}>
+                  <option key={m} value={m} className="bg-slate-900 text-white">
                     {m}
                   </option>
                 ))}
@@ -133,7 +133,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-800 rounded text-xs py-0.5 px-1.5 focus:outline-none"
               >
                 {YEARS.map((y) => (
-                  <option key={y} value={y}>
+                  <option key={y} value={y} className="bg-slate-900 text-white">
                     {y}
                   </option>
                 ))}
@@ -194,9 +194,9 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
               onChange={(e) => onChange({ ...period, selectedMonth: e.target.value })}
               className="w-full bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="All">All Months</option>
+              <option value="All" className="bg-slate-900 text-white">All Months</option>
               {MONTHS.map((m) => (
-                <option key={m} value={m}>
+                <option key={m} value={m} className="bg-slate-900 text-white">
                   {m}
                 </option>
               ))}
@@ -210,9 +210,9 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
               onChange={(e) => onChange({ ...period, selectedYear: e.target.value === 'All' ? 'All' : Number(e.target.value) })}
               className="w-full bg-slate-900 text-white border border-slate-700 rounded-lg text-xs py-1.5 px-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              <option value="All">All Years</option>
+              <option value="All" className="bg-slate-900 text-white">All Years</option>
               {YEARS.map((y) => (
-                <option key={y} value={y}>
+                <option key={y} value={y} className="bg-slate-900 text-white">
                   {y}
                 </option>
               ))}
@@ -231,7 +231,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-700 rounded text-xs py-1 px-1.5 focus:outline-none"
               >
                 {MONTHS.map((m) => (
-                  <option key={m} value={m}>
+                  <option key={m} value={m} className="bg-slate-900 text-white">
                     {m}
                   </option>
                 ))}
@@ -242,7 +242,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-700 rounded text-xs py-1 px-1.5 focus:outline-none"
               >
                 {YEARS.map((y) => (
-                  <option key={y} value={y}>
+                  <option key={y} value={y} className="bg-slate-900 text-white">
                     {y}
                   </option>
                 ))}
@@ -260,7 +260,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-700 rounded text-xs py-1 px-1.5 focus:outline-none"
               >
                 {MONTHS.map((m) => (
-                  <option key={m} value={m}>
+                  <option key={m} value={m} className="bg-slate-900 text-white">
                     {m}
                   </option>
                 ))}
@@ -271,7 +271,7 @@ export const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="bg-slate-950 text-white border border-slate-700 rounded text-xs py-1 px-1.5 focus:outline-none"
               >
                 {YEARS.map((y) => (
-                  <option key={y} value={y}>
+                  <option key={y} value={y} className="bg-slate-900 text-white">
                     {y}
                   </option>
                 ))}

@@ -7,11 +7,11 @@
     @apply bg-slate-950 text-slate-100 font-sans antialiased min-h-screen selection:bg-blue-500 selection:text-white;
   }
 
-  /* Force all form input fields, selects, textareas to use black text font color */
+  /* Base form controls styling */
   input,
   select,
   textarea {
-    color: #000000 !important;
+    color: #0f172a;
     font-weight: 500;
   }
 
@@ -19,6 +19,41 @@
   textarea::placeholder {
     color: #64748b !important;
     font-weight: 400;
+  }
+
+  /* Universal High-Contrast Dropdowns Styling (Fix for browser/OS color mismatch) */
+  select {
+    color: #0f172a;
+  }
+
+  /* Default options: crisp dark text on white background */
+  select option {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* Dark theme selects: crisp white text on dark slate */
+  select.text-white,
+  select[class*="text-white"],
+  select[class*="bg-slate-9"],
+  select[class*="bg-slate-8"] {
+    color: #ffffff !important;
+  }
+
+  select.text-white option,
+  select[class*="text-white"] option,
+  select[class*="bg-slate-9"] option,
+  select[class*="bg-slate-8"] option {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+  }
+
+  /* Dark theme inputs (date pickers in header/sidebar) */
+  input.text-white,
+  input[class*="text-white"],
+  input[class*="bg-slate-9"],
+  input[class*="bg-slate-8"] {
+    color: #ffffff !important;
   }
 }
 

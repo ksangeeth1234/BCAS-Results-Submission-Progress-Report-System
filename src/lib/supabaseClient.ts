@@ -42,16 +42,19 @@ export async function fetchAllRecords(): Promise<{ data: ResultsSubmissionRecord
 // 2. ADD A NEW RECORD (POST)
 export async function addRecord(record: Omit<ResultsSubmissionRecord, 'id' | 'created_at' | 'updated_at'>): Promise<{ data: ResultsSubmissionRecord | null; error: string | null }> {
   try {
+    // Strip client-only fields that do NOT exist in the DB schema
+    const { given_deadline: _gd, achieved_or_not: _ao, ...safeRecord } = record as any;
+
     const payload = {
-      ...record,
-      branch_code: record.branch_code || '',
-      intake: record.intake || '',
-      module: record.module || '',
-      relevant_submission_month: record.relevant_submission_month || '',
-      progress_submitted: Boolean(record.progress_submitted),
-      progress_not_submitted: Boolean(record.progress_not_submitted),
-      delay_submitted: Boolean(record.delay_submitted),
-      delay_not_yet_submitted: Boolean(record.delay_not_yet_submitted),
+      ...safeRecord,
+      branch_code: safeRecord.branch_code || '',
+      intake: safeRecord.intake || '',
+      module: safeRecord.module || '',
+      relevant_submission_month: safeRecord.relevant_submission_month || '',
+      progress_submitted: Boolean(safeRecord.progress_submitted),
+      progress_not_submitted: Boolean(safeRecord.progress_not_submitted),
+      delay_submitted: Boolean(safeRecord.delay_submitted),
+      delay_not_yet_submitted: Boolean(safeRecord.delay_not_yet_submitted),
     };
 
     const response = await fetch(REST_API_ENDPOINT, {
@@ -78,8 +81,11 @@ export async function addRecord(record: Omit<ResultsSubmissionRecord, 'id' | 'cr
 // 3. UPDATE RECORD (PATCH)
 export async function updateRecord(id: number, record: Partial<ResultsSubmissionRecord>): Promise<{ data: ResultsSubmissionRecord | null; error: string | null }> {
   try {
+    // Strip client-only fields that do NOT exist in the DB schema
+    const { given_deadline: _gd2, achieved_or_not: _ao2, ...safeUpdate } = record as any;
+
     const payload: any = {
-      ...record,
+      ...safeUpdate,
       updated_at: new Date().toISOString(),
     };
     if ('progress_submitted' in record) payload.progress_submitted = Boolean(record.progress_submitted);

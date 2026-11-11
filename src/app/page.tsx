@@ -45,8 +45,8 @@ export default function Home() {
 
   // Filters state for Manage Records
   const [filterState, setFilterState] = useState<FilterState>({
-    report_month: 'September',
-    report_year: 2026,
+    report_month: '',
+    report_year: '',
     faculty: '',
     department: '',
     intake: '',
@@ -80,15 +80,6 @@ export default function Home() {
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  // Keep filter state month & year synced when reporting period changed
-  useEffect(() => {
-    setFilterState((prev) => ({
-      ...prev,
-      report_month: reportingPeriod.selectedMonth,
-      report_year: reportingPeriod.selectedYear,
-    }));
-  }, [reportingPeriod]);
 
   // Handle Record Save (Create or Update)
   const handleSaveRecord = async (recordData: Partial<ResultsSubmissionRecord>) => {
